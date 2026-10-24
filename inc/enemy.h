@@ -14,11 +14,11 @@
 
 typedef struct _enemigo
 {
-    int id;                 // Identificador del enemigo
-    char* name;           // Nombre del enemigo
-    int vida;               // Puntos de vida actuales
-    int max_vida;           // Puntos de vida max    
-    int danho;               // Puntos de ataque del enemigo al jugador
+    int id;                // Identificador del enemigo (unico)
+    char* name;            // Nombre del enemigo;
+    int vida;              // Puntos de vida actuales
+    int max_vida;          // Puntos de vida max    
+    int danho;             // Puntos de ataque del enemigo al jugador
 } Enemigo;
 
 /* Manejo del enemigo */
@@ -31,7 +31,7 @@ typedef struct _enemigo
  * @param danho Ataque del enemigo al jugador
  * @return Puntero al Enemigo.
  */
- Enemigo *Crear_Enemigo(int id, char *name, int hp, int danho);
+Enemigo *Crear_Enemigo(int id, char *name, int hp, int danho);
 
  /**
   * @brief Indica si el enemigo esta muerto o no.
@@ -40,7 +40,7 @@ typedef struct _enemigo
   * Si el puntero es NULL se imprime un aviso.
   * @return true si el enemigo esta muerto, false en caso contrario.
   */
-  bool Esta_Muerto(Enemigo *E);
+bool Esta_Muerto(Enemigo *E);
 
   /**
    * @brief Realiza un ataque al enemigo y actualiza las estadisticas.
@@ -49,7 +49,7 @@ typedef struct _enemigo
    * Si el puntero es NULL se imprime un aviso.
    * @param danho Puntos de ataque del enemigo.
    */
-  void Enemigo_RecibeDanho(Enemigo *E, int danho);
+void Enemigo_RecibeDanho(Enemigo *E, int danho);
 
  /**
   * @brief Libera el Enemigo en memoria. Acepta NULL.
@@ -57,7 +57,6 @@ typedef struct _enemigo
   * @param E Puntero a la estruct Enemigo que se desea liberar. 
   * Si el puntero es NULL se imprime un aviso.
   */
-  void Destruir_Enemigo(Enemigo *E);
-  
+void Destruir_Enemigo(Enemigo *E);
 
-  #endif
+#endif
