@@ -1,11 +1,11 @@
 /**
  * @file combat.h
- * @author Ariel Barría (ariebarr@umag.cl)
+ * @author Ariel Barría (ariebarr@umagallanes.cl)
  * @brief Header en donde se definen las funcionalidades de combate.
  * @version 0.1
  * @date 2026-10-24
  * 
- * Esta funcionalidad debera permitir:
+ * Esta funcionalidad debera permitir (Requerimientos del pdf):
  * - Enfrentar un enemigo (en orden): El sistema debe permitir combates contra varios enemigos. 
  * Cada enemigo tendrá asignado un número de aparición, que determinará el orden en que 
  * deberán ser enfrentados. Por ejemplo, si aparecen tres enemigos, el personaje deberá

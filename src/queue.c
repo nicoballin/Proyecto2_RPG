@@ -23,21 +23,21 @@ Queue Cola_Crear(void)
 /* Si la cola esta vacia, se devuelve NULL */
 bool Cola_Esta_Vacia(Queue Q)
 {
-    if(Q == NULL)
-    {
-        printf("La cola esta vacia!\n");
-        return true;
-    }
+    if(Q == NULL) return true;
     return (Q->size == 0);
 }
 
-bool Cola_Enqueue(ElementType X, Queue Q, Position P)
+bool Cola_Enqueue(ElementType X, Queue Q)
 {
     if (Q == NULL) return false;
 
-    /* Nuevo nodo */
-    P = malloc(sizeof(struct Node));
-    if (P == NULL) return false;
+    /* Nuevo nodo, se define P localmente */
+    Position P = malloc(sizeof(struct Node));
+    if (P == NULL)
+    {
+        printf("Error de memoria!\n");
+        return false;
+    }
 
     P->Element = X;
     P->Next = NULL;
@@ -45,37 +45,48 @@ bool Cola_Enqueue(ElementType X, Queue Q, Position P)
     if (Cola_Esta_Vacia(Q))
     {
         Q->Front = P;
-        Q->Rear = P;
-        Q->size++;
-        Q->capacity++;
     }
     else
     {
         Q->Rear->Next = P;
-        Q->Rear = P;
-        Q->size++;
     }
+    Q->Rear = P;
+    Q->size++;
+    //Q->capacity++;
     return true;
 }
 
-bool Cola_Dequeue(int id, Queue Q)
+bool Cola_Dequeue(Queue Q)
 {
-    if (Q == NULL) return false;
+    if(Cola_Esta_Vacia(Q)) return false;
 
-    /* La id entregada en la funcion se vuelve la id del primer elemento de la cola*/
-    id = Q->Front->Element.id;
+    /* Localmente la posicion que se va a devolver y front pasa al sig. */
     Position P = Q->Front;
     Q->Front = Q->Front->Next;
-    
-    /* Si al avanzar qued vacia se actualiza el puntero del final */
-    if (Q->size == 0)
-    {
-        Q->Front = NULL;
-        Q->Rear = NULL;
-    }
+
+    /* Si el el frente quedo en NULL la cola esta vacia */
+    if (Q->Front == NULL) Q->Rear = NULL;
 
     free(P); /* Ya actualizada la posicion */
     Q->size--;
-    Q->capacity--;
+    // Q->capacity--;
     return true;
+}
+
+ElementType Cola_Front(Queue Q)
+{
+    if (Cola_Esta_Vacia(Q)) return NULL;
+    return Q->Front->Element;
+}
+
+void Cola_Destruir(Queue Q)
+{
+    if (Q == NULL) return;
+
+    /* Si la cola esta vacia hace dequeue a cada elemento*/
+    while(!Cola_Esta_Vacia(Q))
+    {
+        Cola_Dequeue(Q);
+    }
+    free(Q);
 }

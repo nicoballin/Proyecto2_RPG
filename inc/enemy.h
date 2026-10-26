@@ -1,6 +1,6 @@
 /**
  * @file enemy.h
- * @author Ariel Barría (ariebarr@umag.cl)
+ * @author Ariel Barría (ariebarr@umagallanes.cl)
  * @brief Header en donde se define el struct del enemigo y funciones esenciales
  * @version 0.1
  * @date 2026-10-23
@@ -31,7 +31,7 @@ typedef struct _enemigo
  * @param danho Ataque del enemigo al jugador
  * @return Puntero al Enemigo.
  */
-Enemigo *Crear_Enemigo(int id, char *name, int hp, int danho);
+Enemigo *Crear_Enemigo(int id, const char *name, int hp, int danho);
 
  /**
   * @brief Indica si el enemigo esta muerto o no.

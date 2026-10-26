@@ -1,6 +1,6 @@
 /**
  * @file queue.h
- * @author Ariel Barría (ariebarr@umag.cl)
+ * @author Ariel Barría (ariebarr@umagallanes.cl)
  * @brief Header en donde se define la cola a utilizar.
  * @version 0.1
  * @date 2026-10-23
@@ -13,13 +13,15 @@
 #define QUEUE_H
 
 #include <stdbool.h>
-#include <stdlib.h> 
-#include "item.h"
+#include <stdlib.h>
 
-typedef Item ElementType; 
-typedef struct Node* PtrToNode; 
-typedef PtrToNode Queue; 
-typedef PtrToNode Position;
+typedef struct Node* Position; 
+typedef struct Queue* Queue; 
+
+/* Definicion del tipo de elemento a utilizar 
+* (_enemigo: para no crear conflictos con otros tipos de elementos) */
+typedef struct _enemigo Enemigo;
+typedef Enemigo* ElementType;
 
 /* Definicion del nodo a utilizar */
 struct Node
@@ -51,23 +53,21 @@ Queue Cola_Crear(void);
  * 
  * @param X Elemento (se copia por valor)
  * @param Q Cola (no puede ser NULL)
- * @param P Posicion despues de la cual se inserta (Q inserta al inicio)
  * @return True si se inserto
  * @return False si algun puntero es NULL o no hay memoria.
  */
-bool Cola_Enqueue(ElementType X, Queue Q, Position P);
+bool Cola_Enqueue(ElementType X, Queue Q);
 
 /**
  * @brief Funcion que Elimina un elemento segun su ID
  * 
  * Funcion booleana.
  * 
- * @param id ID del Item
  * @param Q la Cola
  * @return TRUE si se elimino
  * @return FALSE si no existe o Q es NULL. 
  */
-bool Cola_Dequeue(int id, Queue Q);
+bool Cola_Dequeue(Queue Q);
 
 /**
  * @brief Funcion que berifica si la cola esta vacia
