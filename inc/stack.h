@@ -14,17 +14,28 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include "item.h"
 
-typedef int ElementType; 
 typedef struct Node* PtrToNode; 
 typedef PtrToNode Stack; 
 typedef PtrToNode Position; 
+
+
+typedef struct {
+    int tipo_accion;
+    Item item;
+    int posicion;
+} ElementType;
 
 struct Node
 { 
    ElementType Element; 
    Position Next; 
 };
+
+
+
+
 
 
 /**
@@ -52,7 +63,7 @@ bool Push(ElementType X, Stack s);
  * @return True si se eliminó
  * @return False si algun puntero es NULL o no hay memoria.
  */
-bool Pop(Stack s, int *resultado);
+bool Pop(Stack s, ElementType *resultado);
 
 /**
  * @brief Funcion que retorna el elemento top de la pila
@@ -60,7 +71,7 @@ bool Pop(Stack s, int *resultado);
  * @return True si se logro retornar el elemento del top.
  * @return False si algun puntero es NULL o no hay memoria.
  */
-bool Top(Stack s, int *resultado);
+bool Top(Stack s, ElementType *resultado);
 
 /**
  * @brief Comprueba si la pila está vacía.
