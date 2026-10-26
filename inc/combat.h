@@ -19,4 +19,37 @@
 #ifndef COMBAT_H
 #define COMBAT_H
 
+/* Involucrar personajes, enemigos e inventario */
+
+#include "enemy.h"
+#include "queue.h"
+#include "character.h"
+#include "inventory.h"
+
+/**
+ * @brief Funcion que inicia el combate.
+ * 
+ * @return TRUE si se inicia el combate correctamente.
+ * @return FALSE si no se inicia el combate.
+ */
+bool Iniciar_Combate(Personaje *P, Inventario *I, Queue cola);
+
+/**
+ * @brief Funcion que muestra el menu del combate.
+ * 
+ * Muestra las opciones de combate:
+ * - Enfrentar enemigo
+ * - Ver inventario
+ * - Utilizar objeto
+ * @param void void.
+ */
+void Combate_Menu(void);
+
+/**
+ * @brief Funcion que permite ver el inventario del personaje.
+ * 
+ * @param inv Puntero a la estructura Inventario.
+ */
+void Combate_Inventario(Inventario *inv);
+
 #endif

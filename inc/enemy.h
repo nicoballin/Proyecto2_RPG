@@ -59,4 +59,11 @@ void Enemigo_RecibeDanho(Enemigo *E, int danho);
   */
 void Destruir_Enemigo(Enemigo *E);
 
+/**
+ * @brief Funcion que muestra el estado del Enemigo.
+ * 
+ * @param E Puntero a la estruct Enemigo que se desea ver.
+ */
+void Mostrar_Enemigo(const Enemigo *E);
+
 #endif
