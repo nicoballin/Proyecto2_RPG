@@ -3,7 +3,7 @@
 #include <string.h>
 #include "enemy.h"
 
-Enemigo *Crear_Enemigo(int id, const char *name, int hp, int danho)
+Enemigo *Enemigo_Crear(int id, const char *name, int hp, int danho)
 {
     /* Comprobacion previa*/
     if (hp <= 0 || danho < 0 || name == NULL) return NULL;
@@ -35,18 +35,18 @@ Enemigo *Crear_Enemigo(int id, const char *name, int hp, int danho)
     return E;
 }
 
-void Destruir_Enemigo(Enemigo *E)
+bool Enemigo_Muerto(Enemigo *E)
+{
+    if (E == NULL) return true;
+    return (E->vida <= 0); 
+}
+
+void Enemigo_Destruir(Enemigo *E)
 {
     if (E == NULL) return;
     /* La funcion free ignora los punteros NULL por defecto*/
     free(E->name);
     free(E);
-}
-
-bool Esta_Muerto(Enemigo *E)
-{
-    if (E == NULL) return true;
-    return (E->vida <= 0); 
 }
 
 void Enemigo_RecibeDanho(Enemigo *E, int danho)
@@ -56,7 +56,7 @@ void Enemigo_RecibeDanho(Enemigo *E, int danho)
     if (E->vida < 0) E->vida = 0; /* No existe la vida negativa*/
 }
 
-void Mostrar_Enemigo(const Enemigo *E)
+void Enemigo_Mostrar(const Enemigo *E)
 {
     if (E == NULL) return;
     printf("\n=== Un [%s] aparecio! ===\n", E->name);

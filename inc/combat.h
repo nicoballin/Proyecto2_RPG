@@ -32,9 +32,8 @@
  * @return TRUE si se inicia el combate correctamente.
  * @return FALSE si no se inicia el combate.
  */
-bool Iniciar_Combate(Personaje *P, Inventario *I, Queue cola);
+bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola);
 
-/* === Funciones para generar oleadas/olas == */
 /**
  * @brief Funcion que genera una oleada de enemigos.
  * 
@@ -55,10 +54,47 @@ Queue Generar_Ola(int numero_ola);
 void Combate_Menu(void);
 
 /**
+ * @brief Funcion que muestra el estado actual en combate.
+ * HP jugador, HP enemigo, cantidad de enemigos en cola.
+ * 
+ * @param P Puntero a la estructura Personaje.
+ * @param E Puntero a la estructura Enemigo (en combate, front de la queue).
+ * @param restantes Cantidad de enemigos en combate restantes.
+ */
+void Combate_Estado(const Personaje *P, const Enemigo *E, int restantes);
+
+/**
  * @brief Funcion que permite ver el inventario del personaje.
  * 
  * @param inv Puntero a la estructura Inventario.
  */
 void Combate_Inventario(Inventario *inv);
+
+/**
+ * @brief Funcion que permite seleccionar y utilizr un objeto del inventario.
+ * 
+ * @param P Puntero a la estructura Personaje.
+ * @param inv Puntero a la estructura Inventario.
+ * @return true Si se logro utilizar el objeto, false en caso contrario.
+ */
+bool Combate_Usar_Objeto(Personaje *P, Inventario *inv);
+
+/**
+ * @brief Funcion que ejecuta el ataque del enemigo hacia el personaje. 
+ * Calcula la reduccion del danho segun la defensa del personaje
+ *
+ * @param P Puntero a la estructura Personaje (defiende).
+ * @param E Puntero a la estructura Enemigo (ataca).
+ */
+void Combate_Turno_Enemigo(Personaje *P, Enemigo *E);
+
+/**
+ * @brief Funcion que realiza el ataque al jugador.
+ * 
+ * @param P Puntero a la estructura Personaje (defiende).
+ * @param E Puntero a la estructura Enemigo (ataca).
+ */
+void Combate_Ataca_Jugador(Personaje *P, Enemigo *E);
+
 
 #endif
