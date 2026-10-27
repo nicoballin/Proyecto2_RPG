@@ -1,7 +1,7 @@
 /**
  * @file combat.h
  * @author Ariel Barría (ariebarr@umagallanes.cl)
- * @brief Header en donde se definen las funcionalidades de combate.
+ * @brief Header en donde se definen las funcionalidades de combate por turnos.
  * @version 0.1
  * @date 2026-10-24
  * 
@@ -23,8 +23,8 @@
 
 #include "enemy.h"
 #include "queue.h"
-#include "character.h"
-#include "inventory.h"
+#include "personaje.h"
+#include "inventario.h"
 
 /**
  * @brief Funcion que inicia el combate.
@@ -33,6 +33,15 @@
  * @return FALSE si no se inicia el combate.
  */
 bool Iniciar_Combate(Personaje *P, Inventario *I, Queue cola);
+
+/* === Funciones para generar oleadas/olas == */
+/**
+ * @brief Funcion que genera una oleada de enemigos.
+ * 
+ * @param numero_ola Tipo de oleada de enemigos (1,2,3)
+ * @return Queue 
+ */
+Queue Generar_Ola(int numero_ola);
 
 /**
  * @brief Funcion que muestra el menu del combate.
