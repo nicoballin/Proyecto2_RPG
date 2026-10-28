@@ -37,6 +37,11 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola);
 /**
  * @brief Funcion que genera una oleada de enemigos.
  * 
+ * 1) Genera una cola vacia
+ * 2) que enemigos apareceran segun numero_ola
+ * 3) cada enemigo con orden fifo
+ * 4) retornar la cola de enemigos ya lista
+ *
  * @param numero_ola Tipo de oleada de enemigos (1,2,3)
  * @return Queue 
  */
@@ -95,6 +100,5 @@ void Combate_Turno_Enemigo(Personaje *P, Enemigo *E);
  * @param E Puntero a la estructura Enemigo (ataca).
  */
 void Combate_Ataca_Jugador(Personaje *P, Enemigo *E);
-
 
 #endif
