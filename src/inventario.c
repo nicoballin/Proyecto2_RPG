@@ -87,6 +87,7 @@ Item* Inventario_Buscar_Id(const Inventario *Inv, int item_id)
         {
             return &(P->Element);
         }
+        P = P->Next;
     }
 
     return NULL;

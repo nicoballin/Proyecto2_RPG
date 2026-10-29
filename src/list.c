@@ -72,9 +72,9 @@ bool Lista_Remover_Elemento(int id, List L)
 bool Lista_Esta_Vacia(List L)
 {
     if(L == NULL || L->Next == NULL)
-        return false;
+        return true;
     
-    return true;
+    return false;
 }
 
 void Lista_Destruir(List L)

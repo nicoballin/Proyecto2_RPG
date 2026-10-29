@@ -115,8 +115,12 @@ void Combate_Estado(const Personaje *P, const Enemigo *E, int restantes)
 {
     printf("\n==============================================\n");
     printf(" JUGADOR: %s | HP: %d / %d PV | ATT: %d | DEF: %d\n", P->name, P->vida, P->max_vida, P->danho, P->defensa);
+    if (E != NULL) 
+    {
+        printf(" ENEMIGO: %s | HP: %d / %d PV | ATT: %d\n", E->name, E->vida, E->max_vida, E->danho);
+    }
     printf("Enemigos restantes %d\n", restantes);
-    printf("\n==============================================\n");
+    printf("==============================================\n");
 }
 
 void Combate_Inventario(Inventario *inv)
@@ -133,7 +137,10 @@ void Combate_Inventario(Inventario *inv)
 
 bool Combate_Usar_Objeto(Personaje *P, Inventario *inv)
 {
-    if (inv == NULL || P == NULL) return false;
+    if (inv == NULL || P == NULL) 
+        return false;
+    
+    return true;
 }
 
 void Combate_Turno_Enemigo(Personaje *P, Enemigo *E)
