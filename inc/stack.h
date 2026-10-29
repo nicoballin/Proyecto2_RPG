@@ -16,27 +16,20 @@
 #include <stdlib.h>
 #include "item.h"
 
-typedef struct Node* PtrToNode; 
-typedef PtrToNode Stack; 
-typedef PtrToNode Position; 
-
+typedef struct StackNode *Stack;
 
 typedef struct {
     int tipo_accion;
     Item item;
     int posicion;
-} ElementType;
+} StackElement;
 
-struct Node
-{ 
-   ElementType Element; 
-   Position Next; 
+typedef struct StackNode *StackPosition;
+
+struct StackNode {
+    StackElement Element;
+    StackPosition Next;
 };
-
-
-
-
-
 
 /**
  * @brief Crea una pilta vacia
@@ -54,7 +47,7 @@ Stack Pila_Crear(void);
  * @return True si se inserto
  * @return False si algun puntero es NULL o no hay memoria.
  */
-bool Push(ElementType X, Stack s);
+bool Push(StackElement, Stack s);
 
 
 /**
@@ -63,7 +56,7 @@ bool Push(ElementType X, Stack s);
  * @return True si se eliminó
  * @return False si algun puntero es NULL o no hay memoria.
  */
-bool Pop(Stack s, ElementType *resultado);
+bool Pop(Stack s, StackElement *resultado);
 
 /**
  * @brief Funcion que retorna el elemento top de la pila
@@ -71,7 +64,7 @@ bool Pop(Stack s, ElementType *resultado);
  * @return True si se logro retornar el elemento del top.
  * @return False si algun puntero es NULL o no hay memoria.
  */
-bool Top(Stack s, ElementType *resultado);
+bool Top(Stack s, StackElement *resultado);
 
 /**
  * @brief Comprueba si la pila está vacía.
@@ -82,5 +75,13 @@ bool Top(Stack s, ElementType *resultado);
 bool Pila_Esta_Vacia(Stack s);
 
 
+/**
+ * @brief Libera todos los nodos de la pila, incluido el nodo centinela.
+ *
+ * @param s Dirección de la pila que se desea destruir.
+ * Si s o la pila apuntada son NULL, no realiza ninguna acción.
+ * @post La pila queda establecida en NULL.
+ */
+void Pila_Destruir(Stack *s);
 
 #endif

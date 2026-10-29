@@ -4,7 +4,7 @@
 
 Stack Pila_Crear(void)
 {
-    Stack s = malloc(sizeof(struct Node));
+    Stack s = malloc(sizeof(struct StackNode));
 
     if(s == NULL)
         return NULL;
@@ -14,7 +14,7 @@ Stack Pila_Crear(void)
 
 }
 
-bool Push(ElementType X, Stack s)
+bool Push(StackElement X, Stack s)
 {
     if(s==NULL)
     {
@@ -23,7 +23,7 @@ bool Push(ElementType X, Stack s)
         
     }
 
-    Stack Tmpcell= malloc(sizeof(struct Node));
+    StackPosition Tmpcell= malloc(sizeof(struct StackNode));
     if(Tmpcell == NULL)
     {
         return false;
@@ -39,7 +39,7 @@ bool Pila_Esta_Vacia(Stack s)
     return s == NULL || s->Next == NULL;
 }
 
-bool Pop(Stack s, ElementType *resultado)
+bool Pop(Stack s, StackElement *resultado)
 {
     Stack FirstCell;
 
@@ -58,7 +58,7 @@ bool Pop(Stack s, ElementType *resultado)
 
 }
 
-bool Top(Stack s, ElementType *resultado)
+bool Top(Stack s, StackElement *resultado)
 {
     if(resultado== NULL || Pila_Esta_Vacia(s))
     {
@@ -70,5 +70,21 @@ bool Top(Stack s, ElementType *resultado)
 
 }
 
+void Pila_Destruir(Stack *s)
+{
+    if (s == NULL || *s == NULL)
+        return;
 
+    StackPosition actual = *s;
+
+    while (actual != NULL)
+    {
+        StackPosition siguiente = actual->Next;
+        free(actual);
+        actual = siguiente;
+    }
+
+    *s = NULL;
+
+}
 
