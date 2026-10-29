@@ -18,15 +18,15 @@
 
 /*Para evitar conflictos de tipos (errores que sucedieron)*/
 typedef Enemigo* QueueElementType;
-typedef struct QueueNode* Position; 
+typedef struct QueueNode* QueuePosition; 
 typedef struct Queue* Queue; 
 
 /* Definicion del nodo a utilizar */
 struct QueueNode
 { 
    QueueElementType Element; 
-   Position Next; 
-   Position Prev; 
+    QueuePosition Next; 
+   QueuePosition Prev; 
 };
 
 /* Definicion de la cola */

@@ -133,7 +133,7 @@ void Combate_Inventario(Inventario *inv)
 
 bool Combate_Usar_Objeto(Personaje *P, Inventario *inv)
 {
-    if (inv == NULL || P = NULL) return false;
+    if (inv == NULL || P == NULL) return false;
 }
 
 void Combate_Turno_Enemigo(Personaje *P, Enemigo *E)
