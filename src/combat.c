@@ -6,18 +6,19 @@
 /* whiles para la cola enemigos, pvp */
 bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
 {
-    if (P == NULL || cola == NULL) return false;
+    if (P == NULL || cola == NULL) 
+        return false;
+
     if (Cola_Esta_Vacia(cola))
     {
         printf("No hay enemigos para combatir\n");
         return true;
     }
 
-    printf("=== BATALLA ===");
     /* Si la cola enemigos no esta vacia y el jugador esta vivo: */
+    printf("=== BATALLA ===");
     while (!Cola_Esta_Vacia(cola) && P->vida > 0)
     {
-        /* COLA: FIFO */
         Enemigo *actual = Cola_Front(cola);
         
         /* Necesitamos vivos a ambos para un pvp 1v1 */
@@ -29,16 +30,15 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
             int opcion = 0;
             printf("Elige una accion: ");
             if (scanf("%d", &opcion) != 1)
-            {
-                /* mientras no sea enter se salta */
-                while (getchar() != '\n') continue;
-            }
+                while (getchar() != '\n') continue; /* limpieza por si escribio letras */
 
             /* 1: jugador ataca enemigo, 2: inventario, 3: objeto */
             if (opcion == 1)
             {
                 Combate_Ataca_Jugador(P, actual);
-                if (!Enemigo_Muerto(actual)) Combate_Turno_Enemigo(P, actual);
+
+                if (!Enemigo_Muerto(actual)) 
+                    Combate_Turno_Enemigo(P, actual);
             }
             else if (opcion == 2)
             {
@@ -47,18 +47,20 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
             else if (opcion == 3)
             {
                 // objeto _ bool usado
-                Combate_Usar_Objeto(P, I);
-                if (!Enemigo_Muerto(actual)) Combate_Turno_Enemigo(P,actual);
+                bool usado = Combate_Usar_Objeto(P, I);
+
+                if (usado && !Enemigo_Muerto(actual)) 
+                    Combate_Turno_Enemigo(P,actual);
             }
             else
             {
-                printf("Opcion invalida\n");
+                printf("Opcion invalida.\n");
             }
         }
 
         if (Enemigo_Muerto(actual))
         {
-            printf("\nDerrotaste a %s!", actual->name);
+            printf("\n>>> Derrotaste a %s! <<<\n", actual->name);
             Cola_Dequeue(cola);
             Enemigo_Destruir(actual);
         }
@@ -67,10 +69,11 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
     /* Final batalla y ciclos while. Caso derrota y victoria */
     if (P->vida <= 0)
     {
-        printf("Game OVER!\n");
+        printf("GAME OVER!!\n");
         return false;
     }
     printf("Victoria! Derrotaste a todos los enemigos.\n");
+
     return true;
 }
 
@@ -83,13 +86,14 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
 Queue Generar_Ola(int numero_ola)
 {
     Queue ola = Cola_Crear();
-    if (ola == NULL) return NULL;
+    if (ola == NULL) 
+        return NULL;
     
     switch (numero_ola)
     {
         case 1:
-            Cola_Enqueue(Enemigo_Crear(1, "Estudiante de ing civil", 25, 6), ola);
-            Cola_Enqueue(Enemigo_Crear(2, "Umagin", 6, 7), ola);
+            Cola_Enqueue(Enemigo_Crear(1, "Zombie comun", 25, 6), ola);
+            Cola_Enqueue(Enemigo_Crear(2, "Dragon bebe", 7, 5), ola);
             break;
         case 2:
             Cola_Enqueue(Enemigo_Crear(1, "bariel", 67, 20), ola);
@@ -139,13 +143,33 @@ bool Combate_Usar_Objeto(Personaje *P, Inventario *inv)
 {
     if (inv == NULL || P == NULL) 
         return false;
-    
-    return true;
+    Combate_Inventario(inv);
+
+    int id = 0;
+    printf("Ingresa ID del objeto a usar (0 para cancelar): ");
+
+    if (scanf("%d", &id) != 1 || id == 0)
+    {
+        /* limpieza por si escribio letras */
+        while (getchar() != '\n');
+        printf("Seleccion: 0, Accion cancelada.\n");
+        return false;
+    }
+    return Inventario_Usar(inv, id, P);
 }
 
 void Combate_Turno_Enemigo(Personaje *P, Enemigo *E)
 {
     if (P == NULL || E == NULL) return;
+
+    int danho_enemigo = E->danho - P->defensa;
+    if (danho_enemigo <= 0) 
+        danho_enemigo = 1; /* Si es negativo, = 1*/
+
+    P->vida -= danho_enemigo;
+    if (P->vida < 0) 
+        P->vida = 0;
+    printf(">>> %s te esta atacando con %d de daño! <<<\n", E->name, danho_enemigo);
 }
 
 void Combate_Ataca_Jugador(Personaje *P, Enemigo *E)
@@ -153,6 +177,6 @@ void Combate_Ataca_Jugador(Personaje *P, Enemigo *E)
     if (P == NULL || E == NULL) return;
 
     int danho = P->danho; // danho total (base+arma)
-    printf("\n Atacas a %s causando %d de daño! <<<\n", E->name, danho);
+    printf("\n>>> Atacas a %s causando %d de daño! <<<\n", E->name, danho);
     Enemigo_RecibeDanho(E, danho);
 }
