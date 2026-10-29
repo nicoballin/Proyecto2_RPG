@@ -169,7 +169,7 @@ void Combate_Turno_Enemigo(Personaje *P, Enemigo *E)
     P->vida -= danho_enemigo;
     if (P->vida < 0) 
         P->vida = 0;
-    printf(">>> %s te esta atacando con %d de daño! <<<\n", E->name, danho_enemigo);
+    printf(">>> %s te esta atacando con %d de danho! <<<\n", E->name, danho_enemigo);
 }
 
 void Combate_Ataca_Jugador(Personaje *P, Enemigo *E)
@@ -177,6 +177,6 @@ void Combate_Ataca_Jugador(Personaje *P, Enemigo *E)
     if (P == NULL || E == NULL) return;
 
     int danho = P->danho; // danho total (base+arma)
-    printf("\n>>> Atacas a %s causando %d de daño! <<<\n", E->name, danho);
+    printf("\n>>> Atacas a %s causando %d de danho! <<<\n", E->name, danho);
     Enemigo_RecibeDanho(E, danho);
 }

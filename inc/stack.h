@@ -1,7 +1,7 @@
 /**
  * @file stack.h
  * @author Gustavo Navarro
- * @brief Implementación de pila
+ * @brief Implementacion de pila
  * @version 0.1
  * @date 2026-10-24
  * 
@@ -53,7 +53,7 @@ bool Push(StackElement, Stack s);
 /**
  * @brief Funcion que elimina el top de la pila
  * @param s Pila (no puede ser NULL)
- * @return True si se eliminó
+ * @return True si se elimino
  * @return False si algun puntero es NULL o no hay memoria.
  */
 bool Pop(Stack s, StackElement *resultado);
@@ -67,7 +67,7 @@ bool Pop(Stack s, StackElement *resultado);
 bool Top(Stack s, StackElement *resultado);
 
 /**
- * @brief Comprueba si la pila está vacía.
+ * @brief Comprueba si la pila esta vacia.
  *
  * @param s Pila que se desea comprobar.
  * @return true si la pila es NULL o no contiene elementos; false en caso contrario.
@@ -78,8 +78,8 @@ bool Pila_Esta_Vacia(Stack s);
 /**
  * @brief Libera todos los nodos de la pila, incluido el nodo centinela.
  *
- * @param s Dirección de la pila que se desea destruir.
- * Si s o la pila apuntada son NULL, no realiza ninguna acción.
+ * @param s Direccion de la pila que se desea destruir.
+ * Si s o la pila apuntada son NULL, no realiza ninguna accion.
  * @post La pila queda establecida en NULL.
  */
 void Pila_Destruir(Stack *s);

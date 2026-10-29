@@ -1,7 +1,7 @@
 /**
  * @file history.h
  * @author Gustavo Navarro
- * @brief Implementación del historial
+ * @brief Implementacion del historial
  * @version 0.1
  * @date 2026-10-25
  * 
@@ -19,17 +19,17 @@
 typedef struct _historial Historial;
 
 /**
- * @brief Crea un historial vacío para registrar acciones.
+ * @brief Crea un historial vacio para registrar acciones.
  */
 Historial *Historial_Crear(void);
 
 /**
- * @brief Guarda los datos de un objeto descartado para poder recuperarlo después.
+ * @brief Guarda los datos de un objeto descartado para poder recuperarlo despues.
  */
 bool Historial_Guardar_Descarte(Historial *H, const Item *item, int posicion);
 
 /**
- * @brief Deshace el último descarte registrado y devuelve el objeto al inventario.
+ * @brief Deshace el ultimo descarte registrado y devuelve el objeto al inventario.
  */
 bool Historial_Deshacer_Ultima(Historial *H, Inventario *Inv);
 

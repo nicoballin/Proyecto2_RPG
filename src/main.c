@@ -1,86 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "personaje.h"
+#include "inventario.h"
 #include "history.h"
 #include "queue.h"
 #include "combat.h"
-
-void Mostrar_Menu_Principal(void)
-{
-    printf("\n=== MENÚ PRINCIPAL ===\n");
-    printf("1. Ver Estado del Personaje\n");
-    printf("2. Ver Inventario\n");
-    printf("3. Simular Combate (Ola 2)\n");
-    printf("4. Ver Historial de Descartes\n");
-    printf("5. Salir del Juego\n");
-    printf("======================\n");
-    printf("Elige una opción: ");
-}
+#include "story.h"
+#include "print.h"
 
 int main(void)
 {
-    printf("Iniciando RPG...\n\n");
+    srand(time(NULL));
 
-    Personaje* heroe = Crear_Personaje("Aventurero", 100, 15, 5);
-    Inventario* inventario_heroe = Inventario_Crear();
-    Historial* historial_partida = Historial_Crear();
-
-    Item* espada = Item_Crear(1, "Espada de Hierro", ITEM_ARMA, RAREZA_COMUN, 10);
-    Item* pocion = Item_Crear(2, "Poción de Vida Menor", ITEM_POCION, RAREZA_COMUN, 25);
+    //Inicio de la hsitoria con la creacion del personaje
+    Personaje *heroe = Story_Introduccion();
     
-    if (espada)
+    if (heroe == NULL) return 1;
+    
+
+    // Inicio del inventario e historial
+    Inventario *inventario_heroe = Inventario_Crear();
+    Historial *historial_partida = Historial_Crear();
+
+    if (inventario_heroe == NULL || historial_partida == NULL)
     {
-        Inventario_Anhadir_Item(inventario_heroe, *espada);
-        Inventario_Usar(inventario_heroe, 1, heroe);
+        printf(ROJO_SANGRE "Error fatal: No se pudieron inicializar los subsistemas." RESET "\n");
+        Destruir_Personaje(heroe);
+        return 1;
     }
-    if (pocion) Inventario_Anhadir_Item(inventario_heroe, *pocion);
-    
-    free(espada);
-    free(pocion);
+
+    //Primer objeto (botiquin o nose)
+    Item *botiquin = Item_Crear(1, "Botiquin de Emergencia", ITEM_POCION, RAREZA_COMUN, 30);
+    if (botiquin != NULL)
+    {
+        Inventario_Anhadir_Item(inventario_heroe, *botiquin);
+        free(botiquin);
+    }
 
     int opcion = 0;
     bool salir = false;
 
+    //Gameloop
     while (!salir && heroe->vida > 0)
     {
-        Mostrar_Menu_Principal();
-        
-        if (scanf("%d", &opcion) != 1) {
-            while (getchar() != '\n'); 
-            continue;
-        }
+        Print_Menu_Inicial();
+        opcion = Opcion_Int(1, 5);
 
         switch (opcion)
         {
             case 1:
+            {
                 Mostrar_Personaje(heroe);
+                Esperar_Enter();
                 break;
+            }
             case 2:
-                Inventario_Print_Items(inventario_heroe);
+            {
+                Story_Explorar_Zona(heroe, inventario_heroe, historial_partida);
                 break;
+            }
             case 3:
-                {
-                    printf("\n--- Entrando en zona hostil ---\n");
-                    // Usamos la lógica de tu compañero para el combate
-                    Queue cola_enemigos = Generar_Ola(2); 
-                    Combate_Iniciar(heroe, inventario_heroe, cola_enemigos);
-                    // Cola_Destruir ya es manejado si se derrotan, pero aseguramos
-                    if (cola_enemigos) Cola_Destruir(cola_enemigos);
-                }
+            {
+                Inventario_Print_Items(inventario_heroe);
+                Esperar_Enter();
                 break;
+            }
             case 4:
+            {
                 Historial_Mostrar(historial_partida);
+                Esperar_Enter();
                 break;
+            }
             case 5:
-                printf("\nSaliendo del juego...\n");
+            {
+                printf("\n" VERDE_ZOMBIE "Has decidido rendirte... La oscuridad devora la universidad.\n"RESET);
+                printf(VERDE_ZOMBIE"Adios "RESET ROJO_SANGRE"%s" RESET "\n", heroe->name);
                 salir = true;
                 break;
+            }
             default:
-                printf("Opción no válida.\n");
+            {
                 break;
+            }
         }
     }
 
+    if (heroe->vida <= 0)
+    {
+        Print_Titulo("GAME OVER");
+        printf("\n\t" ROJO_SANGRE "%s "RESET VERDE_ZOMBIE"ha sucumbido ante las hordas infectadas." RESET "\n\n", heroe->name);
+    }
+
+    //Liberacion de memoria
     Destruir_Personaje(heroe);
     Inventario_Destruir(inventario_heroe);
     Historial_Destruir(historial_partida);

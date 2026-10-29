@@ -1,6 +1,6 @@
 /**
  * @file enemy.h
- * @author Ariel Barría (ariebarr@umagallanes.cl)
+ * @author Ariel Barria (ariebarr@umagallanes.cl)
  * @brief Header en donde se define el struct del enemigo y funciones esenciales
  * @version 0.1
  * @date 2026-10-23

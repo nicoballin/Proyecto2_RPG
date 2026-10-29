@@ -2,7 +2,7 @@
 #include "queue.h"
 
 /*
-Implementación desde cero utilizando nodos enlazados. (Sin tamanho fijo).
+Implementacion desde cero utilizando nodos enlazados. (Sin tamanho fijo).
 */
 Queue Cola_Crear(void)
 {
