@@ -13,29 +13,29 @@
 #define QUEUE_H
 
 #include <stdbool.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 
-typedef struct Node* Position; 
-typedef struct Queue* Queue; 
+typedef struct QueueNode* QueuePosition; 
+typedef struct Queue* Queue;
 
 /* Definicion del tipo de elemento a utilizar 
 * (_enemigo: para no crear conflictos con otros tipos de elementos) */
 typedef struct _enemigo Enemigo;
-typedef Enemigo* ElementType;
+typedef Enemigo* QueueElement;
 
 /* Definicion del nodo a utilizar */
-struct Node
+struct QueueNode
 { 
-   ElementType Element; 
-   Position Next; 
-   Position Prev; 
+   QueueElement Element; 
+   QueuePosition Next; 
+   QueuePosition Prev; 
 };
 
 /* Definicion de la cola */
 struct Queue
 {
-    Position Front;
-    Position Rear;
+    QueuePosition Front;
+    QueuePosition Rear;
     int size;
     int capacity;
 };
@@ -56,7 +56,7 @@ Queue Cola_Crear(void);
  * @return True si se inserto
  * @return False si algun puntero es NULL o no hay memoria.
  */
-bool Cola_Enqueue(ElementType X, Queue Q);
+bool Cola_Enqueue(QueueElement X, Queue Q);
 
 /**
  * @brief Funcion que Elimina un elemento segun su ID
@@ -81,13 +81,13 @@ bool Cola_Esta_Vacia(Queue Q);
 /**
  * @brief Funcion que devuelve el Frente (front) de la cola
  *
- * Funcion de tipo ElementType (un elemento dentro de la cola)
+ * Funcion de tipo QueueElement (un elemento dentro de la cola)
  *
  * @param Q la Cola
  * @return El elemento que esta en el Frente
  * @return NULL si Q es NULL o esta vacia
  */
-ElementType Cola_Front(Queue Q);
+QueueElement Cola_Front(Queue Q);
 
 /**
  * @brief Funcion par adestruir y liberar la memoria que iutiliza la Cola

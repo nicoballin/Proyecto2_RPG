@@ -22,6 +22,7 @@ Personaje* Crear_Personaje(const char *name, int hp, int attack, int defense)
     P->name = malloc(strlen(name) + 1);
 	if(P->name == NULL){
 		printf("Error: no hay memoria disponible para el nombre del personaje\n");
+        free(P);
 		return NULL;
 	}
 	strcpy(P->name, name);

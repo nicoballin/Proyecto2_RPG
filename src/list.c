@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include "list.h"
 
-
 List Lista_Crear(void)
 {
-    List L = malloc(sizeof(struct Node));
+    List L = malloc(sizeof(struct ListNode));
     if(L == NULL)
     {
         printf("Error: No hay memoria disponible para crear la lista\n");
@@ -16,7 +15,7 @@ List Lista_Crear(void)
     return L;
 }
 
-bool Lista_Insertar_Elemento(ElementType X, List L, Position P)
+bool Lista_Insertar_Elemento(ListElement X, List L, ListPosition P)
 {
     if (L == NULL || P == NULL)
     {
@@ -24,7 +23,7 @@ bool Lista_Insertar_Elemento(ElementType X, List L, Position P)
         return false;
     }
         
-    Position TmpCell = malloc(sizeof(struct Node)); 
+    ListPosition TmpCell = malloc(sizeof(struct ListNode)); 
     if (TmpCell == NULL)
     {
         printf("Error: No hay memoria disponible para insertar el elemento\n");
@@ -51,7 +50,7 @@ bool Lista_Remover_Elemento(int id, List L)
         return false;
     }
 
-    Position P = L->Next; 
+    ListPosition P = L->Next; 
     while (P != NULL && P->Element.id != id) 
     {
         P = P->Next;
@@ -80,10 +79,10 @@ bool Lista_Esta_Vacia(List L)
 
 void Lista_Destruir(List L)
 {
-    Position P = L;
+    ListPosition P = L;
     while (P != NULL) 
     {
-        Position Tmp = P->Next;
+        ListPosition Tmp = P->Next;
         free(P);
         P = Tmp;
     }

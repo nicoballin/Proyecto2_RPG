@@ -24,6 +24,8 @@ Item* Item_Crear(int id, const char* name, ItemType type, ItemRarity rarity, int
     if (nuevo->name == NULL)
     {
         printf("Error al asignar memoria para el nombre del nuevo item\n");
+        free(nuevo); //libera memoria de nuevo item.
+        return NULL;
     }
     strcpy(nuevo->name, name);
 

@@ -47,7 +47,7 @@ void Inventario_Print_Items(const Inventario *Inv)
     }
 
     //me salto el centinela con 
-    Position P = Inv->items->Next; 
+    ListPosition P = Inv->items->Next; 
     while (P != NULL) 
     { 
         printf("[%d] %s (%s|%s) - Efecto: %d\n", P->Element.id, P->Element.name, Item_Tipo_A_Texto(P->Element.type), Item_Rareza_A_Texto(P->Element.rarity), P->Element.value);
@@ -61,7 +61,7 @@ Item* Inventario_Buscar_Nombre(const Inventario *Inv, const char *name)
 {
     if (Inv == NULL || name == NULL)
         return NULL;
-    Position P = Inv->items->Next;   
+    ListPosition P = Inv->items->Next;   
     while (P != NULL) 
     {
         if (strcasecmp(P->Element.name, name) == 0)
@@ -80,7 +80,7 @@ Item* Inventario_Buscar_Id(const Inventario *Inv, int item_id)
     if (Inv == NULL)
         return NULL;
 
-    Position P = Inv->items->Next;
+    ListPosition P = Inv->items->Next;
     while(P!=NULL)
     {
         if(P->Element.id == item_id)
@@ -127,6 +127,7 @@ bool Inventario_Usar(Inventario *Inv, int item_id, Personaje *P)
             printf("Equipas %s. Ataque: %d -> %d.\n",
                    copia.name, P->danho, nuevo_danho);
             P->danho = P->danho_base + copia.value;
+            return true;
         }
         case ITEM_ARMADURA:
         {
@@ -135,6 +136,7 @@ bool Inventario_Usar(Inventario *Inv, int item_id, Personaje *P)
             printf("Equipas %s. Defensa: %d -> %d.\n",
                    copia.name, P->defensa, P->defensa_base + copia.value);
             P->defensa = P->defensa_base + copia.value;
+            return true;
         }
         case ITEM_OTRO_TIPO:
         {

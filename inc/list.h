@@ -16,16 +16,16 @@
 #include <stdlib.h>
 #include "item.h"
 
-typedef Item ElementType; 
-typedef struct Node* PtrToNode; 
-typedef PtrToNode List; 
-typedef PtrToNode Position; 
+typedef Item ListElement; 
+typedef struct ListNode* PtrToListNode; 
+typedef PtrToListNode List; 
+typedef PtrToListNode ListPosition; 
 
-struct Node
+struct ListNode
 { 
-   ElementType Element; 
-   Position Next; 
-   Position Prev; 
+   ListElement Element; 
+   ListPosition Next; 
+   ListPosition Prev; 
 };
 
 /**
@@ -45,7 +45,7 @@ List Lista_Crear(void);
  * @return True si se inserto
  * @return False si algun puntero es NULL o no hay memoria.
  */
-bool Lista_Insertar_Elemento(ElementType X, List L, Position P);
+bool Lista_Insertar_Elemento(ListElement X, List L, ListPosition P);
 
 /**
  * @brief Funcion que Elimina un elemento segun su ID

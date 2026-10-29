@@ -21,20 +21,20 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
         Enemigo *actual = Cola_Front(cola);
         
         /* Necesitamos vivos a ambos para un pvp 1v1 */
-        while (!Esta_Muerto(actual) && P->vida > 0)
+        while (!Enemigo_Muerto(actual) && P->vida > 0)
         {
-            Combate_Estado(P, actual, cola_size);
+            Combate_Estado(P, actual, cola->size);
             Combate_Menu();
             int opcion = 0;
             printf("Elige una accion: ");
             scanf("%d", &opcion);
             /* 1: jugador ataca enemigo, 2: inventario, 3: objeto*/
         }
-        if (Esta_Muerto(actual))
+        if (Enemigo_Muerto(actual))
         {
             printf("\nDerrotaste a %s!", actual->name);
             Cola_Dequeue(cola);
-            Destruir_Enemigo(actual);
+            Enemigo_Destruir(actual);
         }
     }
 

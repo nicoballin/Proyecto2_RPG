@@ -27,12 +27,12 @@ bool Cola_Esta_Vacia(Queue Q)
     return (Q->size == 0);
 }
 
-bool Cola_Enqueue(ElementType X, Queue Q)
+bool Cola_Enqueue(QueueElement X, Queue Q)
 {
     if (Q == NULL) return false;
 
     /* Nuevo nodo, se define P localmente */
-    Position P = malloc(sizeof(struct Node));
+    QueuePosition P = malloc(sizeof(struct QueueNode));
     if (P == NULL)
     {
         printf("Error de memoria!\n");
@@ -61,7 +61,7 @@ bool Cola_Dequeue(Queue Q)
     if(Cola_Esta_Vacia(Q)) return false;
 
     /* Localmente la posicion que se va a devolver y front pasa al sig. */
-    Position P = Q->Front;
+    QueuePosition P = Q->Front;
     Q->Front = Q->Front->Next;
 
     /* Si el el frente quedo en NULL la cola esta vacia */
@@ -73,7 +73,7 @@ bool Cola_Dequeue(Queue Q)
     return true;
 }
 
-ElementType Cola_Front(Queue Q)
+QueueElement Cola_Front(Queue Q)
 {
     if (Cola_Esta_Vacia(Q)) return NULL;
     return Q->Front->Element;
