@@ -59,11 +59,7 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
 
         if (Enemigo_Muerto(actual))
         {
-<<<<<<< HEAD
-            printf("\n>>> Derrotaste a %s! Se retira de la cola de combate. <<<\n", actual->name);
-=======
             printf("\n" NARANJA_CALABAZA ">>> Has destrozado a [%s]! <<<" RESET "\n", actual->name);
->>>>>>> d48f586d691815c140fc43734f339acdb5bc8f77
             Cola_Dequeue(cola);
             Enemigo_Destruir(actual);
         }
@@ -76,13 +72,9 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
         printf(ROJO_SANGRE "Has sido devorado..." RESET "\n");
         return false;
     }
-<<<<<<< HEAD
-    printf("\t VICTORIA!! DERROTASTE LA OLEADA!!\n");
-=======
 
     printf(VERDE_ZOMBIE "Lograste sobrevivir a este encuentro. El silencio vuelve a la zona." RESET "\n");
 
->>>>>>> d48f586d691815c140fc43734f339acdb5bc8f77
     return true;
 }
 
