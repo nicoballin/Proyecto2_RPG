@@ -60,7 +60,7 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
 
         if (Enemigo_Muerto(actual))
         {
-            printf("\n>>> Derrotaste a %s! <<<\n", actual->name);
+            printf("\n>>> Derrotaste a %s! Se retira de la cola de combate. <<<\n", actual->name);
             Cola_Dequeue(cola);
             Enemigo_Destruir(actual);
         }
@@ -72,8 +72,7 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
         printf("GAME OVER!!\n");
         return false;
     }
-    printf("Victoria! Derrotaste a todos los enemigos.\n");
-
+    printf("\t VICTORIA!! DERROTASTE LA OLEADA!!\n");
     return true;
 }
 
@@ -92,17 +91,23 @@ Queue Generar_Ola(int numero_ola)
     switch (numero_ola)
     {
         case 1:
-            Cola_Enqueue(Enemigo_Crear(1, "Zombie comun", 25, 6), ola);
-            Cola_Enqueue(Enemigo_Crear(2, "Dragon bebe", 7, 5), ola);
+            Cola_Enqueue(Enemigo_Crear(1, "Infectado lento", 7, 5), ola);
+            Cola_Enqueue(Enemigo_Crear(2, "Infectado de 1.80cm", 10, 5), ola);
+            Cola_Enqueue(Enemigo_Crear(3, "Profesor infectado", 67, 20), ola);
             break;
         case 2:
-            Cola_Enqueue(Enemigo_Crear(1, "bariel", 67, 20), ola);
-            Cola_Enqueue(Enemigo_Crear(2, "inacapin", 20, 50), ola);
-            Cola_Enqueue(Enemigo_Crear(3, "Goblin", 40, 17), ola);
+            Cola_Enqueue(Enemigo_Crear(1, "Estudiante Zombi", 67, 10), ola);
+            Cola_Enqueue(Enemigo_Crear(2, "Pregrado Virtual Hackeado", 40, 15), ola);
+            Cola_Enqueue(Enemigo_Crear(3, "Conejo infectado", 50, 25), ola);
+            break;
+        case 3:
+            Cola_Enqueue(Enemigo_Crear(1, "Estudiante infectado", 60, 22), ola);
+            Cola_Enqueue(Enemigo_Crear(2, "Conejo Zombi", 30, 3), ola);
+            Cola_Enqueue(Enemigo_Crear(3, "SID2.umag.cl", 80, 5), ola);
             break;
         default:
         /*caso generico*/
-            Cola_Enqueue(Enemigo_Crear(1, "Missingno", 6, 5), ola);
+            Cola_Enqueue(Enemigo_Crear(1, "Missingno", 80, 20), ola);
             break;
     }
     return ola;
@@ -123,7 +128,12 @@ void Combate_Estado(const Personaje *P, const Enemigo *E, int restantes)
     {
         printf(" ENEMIGO: %s | HP: %d / %d PV | ATT: %d\n", E->name, E->vida, E->max_vida, E->danho);
     }
-    printf("Enemigos restantes %d\n", restantes);
+    if (restantes > 0)
+        restantes--;
+    else
+        restantes = 0;
+
+    printf("Enemigos en espera %d\n", restantes);
     printf("==============================================\n");
 }
 
