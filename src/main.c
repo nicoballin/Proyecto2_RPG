@@ -15,7 +15,6 @@ int main(void)
 
     //Inicio de la hsitoria con la creacion del personaje
     Personaje *heroe = Story_Introduccion();
-    
     if (heroe == NULL) return 1;
     
 
@@ -30,12 +29,23 @@ int main(void)
         return 1;
     }
 
-    //Primer objeto (botiquin o nose)
-    Item *botiquin = Item_Crear(1, "Botiquin de Emergencia", ITEM_POCION, RAREZA_COMUN, 30);
-    if (botiquin != NULL)
+    // inventario inicial
+    Item *botiquin = Item_Crear(1, "Botiquin de Primeros Auxilios", ITEM_POCION, RAREZA_COMUN, 30);
+    Item *arma_inicial = Item_Crear(2, "Bate de Beisbol con Clavos", ITEM_ARMA, RAREZA_COMUN, 15);
+    Item *armadura_inicial = Item_Crear(3, "Chaqueta de Cuero Gruesa", ITEM_ARMADURA, RAREZA_COMUN, 5);
+
+    if (botiquin != NULL && arma_inicial != NULL && armadura_inicial != NULL)
     {
         Inventario_Anhadir_Item(inventario_heroe, *botiquin);
+        Inventario_Anhadir_Item(inventario_heroe, *arma_inicial);
+        Inventario_Anhadir_Item(inventario_heroe, *armadura_inicial);
         free(botiquin);
+        free(arma_inicial);
+        free(armadura_inicial);
+        
+        //equipar todo automaticamente al inicio
+        Inventario_Usar(inventario_heroe, 2, heroe);
+        Inventario_Usar(inventario_heroe, 3, heroe);
     }
 
     int opcion = 0;

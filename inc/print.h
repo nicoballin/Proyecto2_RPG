@@ -43,8 +43,9 @@ void Print_Opcion(int numero, const char* texto);
 /**
  * @brief Imprime el prompt para ingresar una opcion. 
  *
+ * @param n 1 si se queire con mensaje y 0 si se quiere solo simbolo
  */
-void Print_Prompt();
+void Print_Prompt(int n);
 
 /**
  * @brief Imprime el menu inicial*/

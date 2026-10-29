@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "enemy.h"
+#include "print.h"
 
 Enemigo *Enemigo_Crear(int id, const char *name, int hp, int danho)
 {
@@ -59,8 +60,7 @@ void Enemigo_RecibeDanho(Enemigo *E, int danho)
 void Enemigo_Mostrar(const Enemigo *E)
 {
     if (E == NULL) return;
-    printf("\n=== Un [%s] aparecio! ===\n", E->name);
-    printf("Vida: %d / %d PV\n", E->vida, E->max_vida);
-    printf("Ataque: %d\n", E->danho);
-    printf("============================\n");
+    printf("\n\t" ROJO_SANGRE "☣ Un [%s] aparecio!" RESET "\n", E->name);
+    printf("\t" GRIS_NIEBLA "Vida: " ROJO_SANGRE "%d / %d PV" RESET "\n", E->vida, E->max_vida);
+    printf("\t" GRIS_NIEBLA "Ataque: " NARANJA_CALABAZA "%d" RESET "\n", E->danho);
 }

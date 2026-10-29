@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "inventario.h"
+#include "print.h"
 
 
 Inventario* Inventario_Crear(void)
@@ -39,22 +40,21 @@ bool Inventario_Anhadir_Item(Inventario *Inv, Item item)
 
 void Inventario_Print_Items(const Inventario *Inv)
 {
-    printf("\n=== INVENTARIO ===\n");
+    Print_Titulo("MOCHILA");
+    printf("\n");
     if (Inv == NULL || Lista_Esta_Vacia(Inv->items))
     {
-        printf("El inventario esta vacio.\n");
+        printf("\t" GRIS_NIEBLA "La mochila esta vacia." RESET "\n");
         return;
     }
 
-    //me salto el centinela con 
     ListPosition P = Inv->items->Next; 
     while (P != NULL) 
     { 
-        printf("[%d] %s (%s|%s) - Efecto: %d\n", P->Element.id, P->Element.name, Item_Tipo_A_Texto(P->Element.type), Item_Rareza_A_Texto(P->Element.rarity), P->Element.value);
+        printf("\t" MORADO_TOXICO "[" VERDE_ZOMBIE "%d" MORADO_TOXICO "] " BLANCO_HUESO "%s" GRIS_NIEBLA " (%s | %s) - Efecto: " NARANJA_CALABAZA "%d" RESET "\n",
+               P->Element.id, P->Element.name, Item_Tipo_A_Texto(P->Element.type), Item_Rareza_A_Texto(P->Element.rarity), P->Element.value);
         P = P->Next;
     }
-
-    return;
 }
 
 Item* Inventario_Buscar_Nombre(const Inventario *Inv, const char *name)
@@ -114,10 +114,10 @@ bool Inventario_Usar(Inventario *Inv, int item_id, Personaje *P)
             P->vida += copia.value;
             if (P->vida > P->max_vida)
                 P->vida = P->max_vida;
-            printf("Usas %s: recuperas %d PV. %s: %d/%d PV.\n",
-                   copia.name, P->vida - antes, P->name, P->vida, P->max_vida);
+            printf("\t" VERDE_ZOMBIE "Usas %s: recuperas %d PV. " GRIS_NIEBLA "%s: %d/%d PV." RESET "\n",
+                    copia.name, P->vida - antes, P->name, P->vida, P->max_vida);
             Lista_Remover_Elemento(item_id, Inv->items);
-            printf("%s se elimina del inventario.\n", copia.name);
+            printf("\t" GRIS_NIEBLA "%s se elimina del inventario." RESET "\n", copia.name);
             return true;
         }
         case ITEM_ARMA:
@@ -125,8 +125,7 @@ bool Inventario_Usar(Inventario *Inv, int item_id, Personaje *P)
             int nuevo_danho = P->danho_base + copia.value;
             P->arma_equipada = copia;
             P->tiene_arma = true;
-            printf("Equipas %s. Ataque: %d -> %d.\n",
-                   copia.name, P->danho, nuevo_danho);
+            printf("\t" VERDE_ZOMBIE "Equipas %s. " NARANJA_CALABAZA "Ataque: %d -> %d." RESET "\n", copia.name, P->danho, nuevo_danho);
             P->danho = P->danho_base + copia.value;
             return true;
         }
@@ -134,14 +133,13 @@ bool Inventario_Usar(Inventario *Inv, int item_id, Personaje *P)
         {
             P->armadura_equipada = copia;
             P->tiene_armadura = true;
-            printf("Equipas %s. Defensa: %d -> %d.\n",
-                   copia.name, P->defensa, P->defensa_base + copia.value);
+            printf("\t" VERDE_ZOMBIE "Equipas %s. " NARANJA_CALABAZA "Defensa: %d -> %d." RESET "\n", copia.name, P->defensa, P->defensa_base + copia.value);
             P->defensa = P->defensa_base + copia.value;
             return true;
         }
         case ITEM_OTRO_TIPO:
         {
-            printf("%s no se puede usar de esta forma.\n", copia.name);
+            printf("\t" GRIS_NIEBLA "%s no se puede usar de esta forma." RESET "\n", copia.name);
             return false;
         }
     }
@@ -161,4 +159,12 @@ void Inventario_Destruir(Inventario *Inv)
         return;
     Lista_Destruir(Inv->items);
     free(Inv);
+}
+
+int Generar_Id_Libre(Inventario *Inv)
+{
+    int id = rand() % MAX_ID + MIN_ID;
+    while (Inventario_Buscar_Id(Inv, id) != NULL)
+        id = rand() % MAX_ID + MIN_ID;
+    return id;
 }

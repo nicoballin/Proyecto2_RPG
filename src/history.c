@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "print.h"
 
 struct _historial {
     Stack acciones;
@@ -50,7 +50,7 @@ bool Historial_Deshacer_Ultima(Historial *H, Inventario *Inv)
     // Extrae r ultimo elemento (LIFO)
     if (!Pop(H->acciones, &ultima_accion)) 
     {
-        printf("No hay acciones en el historial para deshacer.\n");
+        printf("\t" GRIS_NIEBLA "No hay acciones en el historial para deshacer." RESET "\n");
         return false;
     }
 
@@ -58,12 +58,12 @@ bool Historial_Deshacer_Ultima(Historial *H, Inventario *Inv)
         // Si fue un descarte, lo devolvemos al inventario
         if (Inventario_Anhadir_Item(Inv, ultima_accion.item)) 
         {
-            printf("Deshiciste la accion. El item [%s] volvio a tu inventario.\n", ultima_accion.item.name);
+            printf("\t" VERDE_ZOMBIE "Deshiciste la accion. " BLANCO_HUESO "%s" VERDE_ZOMBIE " volvio a tu mochila." RESET "\n", ultima_accion.item.name);
             return true;
         } 
         else 
         {
-            printf("Error: No se pudo devolver el item al inventario.\n");
+            printf("\t" ROJO_SANGRE "Error: No se pudo devolver el item al inventario." RESET "\n");
             return false;
         }
     }
@@ -72,13 +72,14 @@ bool Historial_Deshacer_Ultima(Historial *H, Inventario *Inv)
 
 void Historial_Mostrar(const Historial *H)
 {
+    Print_Titulo("BITACORA DE DECISIONES");
+    printf("\n");
+
     if (H == NULL || Pila_Esta_Vacia(H->acciones))
     {
-        printf("El historial esta vacio.\n");
+        printf("\t" BLANCO_HUESO "La bitacora esta vacia." RESET "\n");
         return;
     }
-
-    printf("\n=== HISTORIAL DE ACCIONES (Mas reciente a mas antigua) ===\n");
     
 
     StackPosition actual = H->acciones->Next;
@@ -87,14 +88,13 @@ void Historial_Mostrar(const Historial *H)
     {
         if (actual->Element.tipo_accion == 1) 
         {
-            printf("%d. Descartaste: %s (ID: %d)\n", i, actual->Element.item.name, actual->Element.item.id);
+            printf("\t" MORADO_TOXICO "%d. " GRIS_NIEBLA "Descartaste: " BLANCO_HUESO "%s" GRIS_NIEBLA " (ID: %d)" RESET "\n",
+                   i, actual->Element.item.name, actual->Element.item.id);
         }
 
         actual = actual->Next;
         i++;
     }
-
-    printf("==========================================================\n");
 }
 
 void Historial_Destruir(Historial *H)

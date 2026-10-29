@@ -12,6 +12,8 @@
 #ifndef ITEM_H
 #define ITEM_H
 #define MAX_ITEMS 50 //nu, de items maximos
+#define MIN_ID 1
+#define MAX_ID 500
 /**
  * @brief Enum destinado a los tipos de items que existen en el juego con la forma ITEM_NOMBRE
  * 
@@ -49,6 +51,7 @@ typedef struct _item
     int value;           // Valor o efecto (ej: +5 ataque, +20 salud)
 } Item;
 
+
 //Funciones
 /**
  * @brief Crea un Item en memoria dinamica.
@@ -84,5 +87,21 @@ const char* Item_Tipo_A_Texto(ItemType type);
  * @return La Rareza del item como texto
  */
 const char* Item_Rareza_A_Texto(ItemRarity rarity);
+
+/**
+ * @brief Crea un item al azar entre los predeterminados de una rareza.
+ *
+ * @param rareza Rareza deseada (RAREZA_COMUN ... RAREZA_LEGENDARIA)
+ * @param id Id que tendra el item
+ * @return Puntero al Item, NULL si hay error.
+ */
+Item* Item_Generar(ItemRarity rareza, int id);
+
+/**
+ * @brief Funcion que asigna una rareza aleatoria a un item
+ * 
+ * @return ItemRarity 
+ */
+ItemRarity Rareza_Aleatoria(void);
 
 #endif
