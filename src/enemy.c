@@ -60,7 +60,7 @@ void Enemigo_Mostrar(const Enemigo *E)
 {
     if (E == NULL) return;
     printf("\n=== Un [%s] aparecio! ===\n", E->name);
-    printf("Vida: %d / %d PV\n" E->vida, E->max_vida);
+    printf("Vida: %d / %d PV\n", E->vida, E->max_vida);
     printf("Ataque: %d\n", E->danho);
     printf("============================\n");
 }
