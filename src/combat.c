@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "print.h"
 #include "queue.h"
 #include "combat.h"
 
@@ -11,12 +12,12 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
 
     if (Cola_Esta_Vacia(cola))
     {
-        printf("No hay enemigos para combatir\n");
+        printf(GRIS_NIEBLA "El area parece estar despejada... por ahora." RESET "\n");
         return true;
     }
 
     /* Si la cola enemigos no esta vacia y el jugador esta vivo: */
-    printf("=== BATALLA ===");
+    Print_Titulo("ENTRANDO EN COMBATE");
     while (!Cola_Esta_Vacia(cola) && P->vida > 0)
     {
         Enemigo *actual = Cola_Front(cola);
@@ -27,11 +28,9 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
             Combate_Estado(P, actual, cola->size);
             Combate_Menu();
 
-            int opcion = 0;
-            printf("Elige una accion: ");
-            if (scanf("%d", &opcion) != 1)
-                while (getchar() != '\n') continue; /* limpieza por si escribio letras */
-
+            int opcion = -1;
+            opcion = Opcion_Int(1, 3);
+        
             /* 1: jugador ataca enemigo, 2: inventario, 3: objeto */
             if (opcion == 1)
             {
@@ -60,7 +59,11 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
 
         if (Enemigo_Muerto(actual))
         {
+<<<<<<< HEAD
             printf("\n>>> Derrotaste a %s! Se retira de la cola de combate. <<<\n", actual->name);
+=======
+            printf("\n" NARANJA_CALABAZA ">>> Has destrozado a [%s]! <<<" RESET "\n", actual->name);
+>>>>>>> d48f586d691815c140fc43734f339acdb5bc8f77
             Cola_Dequeue(cola);
             Enemigo_Destruir(actual);
         }
@@ -69,10 +72,17 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
     /* Final batalla y ciclos while. Caso derrota y victoria */
     if (P->vida <= 0)
     {
-        printf("GAME OVER!!\n");
+        Print_Titulo("GAME OVER");
+        printf(ROJO_SANGRE "Has sido devorado..." RESET "\n");
         return false;
     }
+<<<<<<< HEAD
     printf("\t VICTORIA!! DERROTASTE LA OLEADA!!\n");
+=======
+
+    printf(VERDE_ZOMBIE "Lograste sobrevivir a este encuentro. El silencio vuelve a la zona." RESET "\n");
+
+>>>>>>> d48f586d691815c140fc43734f339acdb5bc8f77
     return true;
 }
 
@@ -90,24 +100,22 @@ Queue Generar_Ola(int numero_ola)
     
     switch (numero_ola)
     {
-        case 1:
-            Cola_Enqueue(Enemigo_Crear(1, "Infectado lento", 7, 5), ola);
-            Cola_Enqueue(Enemigo_Crear(2, "Infectado de 1.80cm", 10, 5), ola);
-            Cola_Enqueue(Enemigo_Crear(3, "Profesor infectado", 67, 20), ola);
+        case 1: // Campus Exterior (Bajo)
+            Cola_Enqueue(Enemigo_Crear(1, "Estudiante Infectado", 25, 6), ola);
+            Cola_Enqueue(Enemigo_Crear(2, "Perro Callejero Rabioso", 15, 8), ola);
             break;
-        case 2:
-            Cola_Enqueue(Enemigo_Crear(1, "Estudiante Zombi", 67, 10), ola);
-            Cola_Enqueue(Enemigo_Crear(2, "Pregrado Virtual Hackeado", 40, 15), ola);
-            Cola_Enqueue(Enemigo_Crear(3, "Conejo infectado", 50, 25), ola);
+        case 2: // Ingenieria (Medio)
+            Cola_Enqueue(Enemigo_Crear(1, "Conserje Mutado", 45, 12), ola);
+            Cola_Enqueue(Enemigo_Crear(2, "Profesor Podrido", 50, 15), ola);
+            Cola_Enqueue(Enemigo_Crear(3, "Masa de Carne Temblorosa", 60, 10), ola);
             break;
-        case 3:
-            Cola_Enqueue(Enemigo_Crear(1, "Estudiante infectado", 60, 22), ola);
-            Cola_Enqueue(Enemigo_Crear(2, "Conejo Zombi", 30, 3), ola);
-            Cola_Enqueue(Enemigo_Crear(3, "SID2.umag.cl", 80, 5), ola);
+        case 3: // Laboratorios (Alto)
+            Cola_Enqueue(Enemigo_Crear(1, "Investigador Cero", 80, 20), ola);
+            Cola_Enqueue(Enemigo_Crear(2, "Sujeto de Pruebas Fallido", 100, 25), ola);
+            Cola_Enqueue(Enemigo_Crear(3, "Amalgama Biologica", 150, 30), ola);
             break;
-        default:
-        /*caso generico*/
-            Cola_Enqueue(Enemigo_Crear(1, "Missingno", 80, 20), ola);
+        default: // Caso de error
+            Cola_Enqueue(Enemigo_Crear(1, "Error de Sistema Z", 10, 1), ola);
             break;
     }
     return ola;
@@ -115,56 +123,56 @@ Queue Generar_Ola(int numero_ola)
 
 void Combate_Menu(void)
 {
-    printf("\n=== COMBATE ===\n");
-    printf("[1] Atacar\n[2] Ver inventario\n[3] Usar objeto\n");
-    printf("==================================================\n");
+    printf("\n");
+    Print_Opcion(-1, "--- ACCIONES DE SUPERVIVENCIA ---");
+    Print_Opcion(1, "Atacar con tu arma");
+    Print_Opcion(2, "Revisar la Mochila");
+    Print_Opcion(3, "Usar Suministro Rapido");
 }
 
 void Combate_Estado(const Personaje *P, const Enemigo *E, int restantes)
 {
-    printf("\n==============================================\n");
-    printf(" JUGADOR: %s | HP: %d / %d PV | ATT: %d | DEF: %d\n", P->name, P->vida, P->max_vida, P->danho, P->defensa);
+    printf("\n" MORADO_TOXICO "==============================================" RESET "\n");
+    printf(BLANCO_HUESO " %s " RESET "| " VERDE_ZOMBIE "VIDA: %d / %d" RESET " | ATAQUE: %d | DEFENSA: %d\n", 
+           P->name, P->vida, P->max_vida, P->danho, P->defensa);
+           
     if (E != NULL) 
     {
-        printf(" ENEMIGO: %s | HP: %d / %d PV | ATT: %d\n", E->name, E->vida, E->max_vida, E->danho);
+        printf(ROJO_SANGRE " AMENAZA: %s " RESET "| VIDA: %d / %d | DAÑO: %d\n", 
+               E->name, E->vida, E->max_vida, E->danho);
     }
-    if (restantes > 0)
-        restantes--;
-    else
-        restantes = 0;
-
-    printf("Enemigos en espera %d\n", restantes);
-    printf("==============================================\n");
+    printf(GRIS_NIEBLA "Enemigos acechando: %d" RESET "\n", restantes);
+    printf(MORADO_TOXICO "==============================================" RESET "\n");
 }
 
 void Combate_Inventario(Inventario *inv)
 {
     if (inv == NULL)
     {
-        printf("El inventario esta vacio.\n");
+        printf(GRIS_NIEBLA "Tu mochila esta vacia." RESET "\n");
         return;
     }
-    printf("\n--- MOCHILA DEL JUGADOR ---\n");
     Inventario_Print_Items(inv);
-    printf("---------------------------\n");
 }
 
 bool Combate_Usar_Objeto(Personaje *P, Inventario *inv)
 {
-    if (inv == NULL || P == NULL) 
-        return false;
+    if (inv == NULL || P == NULL) return false;
+        
     Combate_Inventario(inv);
 
+    printf(GRIS_NIEBLA "\n(Ingresa 0 para cancelar la accion)" RESET "\n");
+    printf("Ingresa el ID del suministro a usar");
+    
     int id = 0;
-    printf("Ingresa ID del objeto a usar (0 para cancelar): ");
-
+    Print_Prompt(1);
     if (scanf("%d", &id) != 1 || id == 0)
     {
-        /* limpieza por si escribio letras */
         while (getchar() != '\n');
-        printf("Seleccion: 0, Accion cancelada.\n");
+        printf(GRIS_NIEBLA "Decides guardar tus cosas para despues." RESET "\n");
         return false;
     }
+    
     return Inventario_Usar(inv, id, P);
 }
 
@@ -179,7 +187,7 @@ void Combate_Turno_Enemigo(Personaje *P, Enemigo *E)
     P->vida -= danho_enemigo;
     if (P->vida < 0) 
         P->vida = 0;
-    printf(">>> %s te esta atacando con %d de danho! <<<\n", E->name, danho_enemigo);
+    printf(ROJO_SANGRE "\n!!! [%s] te ataca causando %d de danho !!!" RESET "\n", E->name, danho_enemigo);
 }
 
 void Combate_Ataca_Jugador(Personaje *P, Enemigo *E)
@@ -187,6 +195,6 @@ void Combate_Ataca_Jugador(Personaje *P, Enemigo *E)
     if (P == NULL || E == NULL) return;
 
     int danho = P->danho; // danho total (base+arma)
-    printf("\n>>> Atacas a %s causando %d de danho! <<<\n", E->name, danho);
+    printf("\n" VERDE_ZOMBIE ">>> Golpeas a [%s] con todas tus fuerzas causandole %d de danho!" RESET "\n", E->name, danho);
     Enemigo_RecibeDanho(E, danho);
 }

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "personaje.h"
+#include "print.h"
 
 Personaje* Crear_Personaje(const char *name, int hp, int attack, int defense)
 {
@@ -46,28 +47,26 @@ void Mostrar_Personaje(Personaje *P)
 {
     if (P == NULL)
     {
-        printf("Error: Jugador no existente\n");
+        printf("\t" ROJO_SANGRE "Error: Jugador no existente" RESET "\n");
         return;
     }
 
-    printf("\n=== ESTADO DEL PERSONAJE ===\n");
-    printf("Nombre : %s\n", P->name);
-    printf("Vida   : %d / %d PV\n", P->vida, P->vida);
-    printf("Ataque : %d\n", P->danho);
-    if (P->tiene_arma) 
-    {
-        printf("Arma equipada: %s (+%d ataque)\n", P->arma_equipada.name, P->arma_equipada.value);
-    } else {
-        printf("Arma equipada: Ninguna\n");
-    }
+    Print_Titulo("ESTADO DEL SOBREVIVIENTE");
+    printf("\n");
+    printf("\t" GRIS_NIEBLA "Nombre  : " VERDE_ZOMBIE "%s" RESET "\n", P->name);
+    printf("\t" GRIS_NIEBLA "Vida    : " ROJO_SANGRE "%d / %d PV" RESET "\n", P->vida, P->max_vida);
+    printf("\t" GRIS_NIEBLA "Ataque  : " NARANJA_CALABAZA "%d" RESET "\n", P->danho);
+    printf("\t" GRIS_NIEBLA "Defensa : " BLANCO_HUESO "%d" RESET "\n", P->defensa);
+
+    if (P->tiene_arma)
+        printf("\t" GRIS_NIEBLA "Arma    : " BLANCO_HUESO "%s" NARANJA_CALABAZA " (+%d ataque)" RESET "\n", P->arma_equipada.name, P->arma_equipada.value);
+    else
+        printf("\t" GRIS_NIEBLA "Arma    : Ninguna" RESET "\n");
 
     if (P->tiene_armadura)
-        printf("Armadura equipada: %s (+%d defensa)\n", P->armadura_equipada.name, P->armadura_equipada.value);
+        printf("\t" GRIS_NIEBLA "Armadura: " BLANCO_HUESO "%s" NARANJA_CALABAZA " (+%d defensa)" RESET "\n", P->armadura_equipada.name, P->armadura_equipada.value);
     else
-        printf("Armadura equipada: Ninguna\n");
-
-    printf("Defensa: %d\n", P->defensa);
-    printf("============================\n");
+        printf("\t" GRIS_NIEBLA "Armadura: Ninguna" RESET "\n");
     return;
 }
 

@@ -16,9 +16,16 @@ void Print_Opcion(int numero, const char* texto)
         printf("\t" MORADO_TOXICO "[" NEGRITA VERDE_ZOMBIE "%d" RESET MORADO_TOXICO "]" RESET " " GRIS_NIEBLA "%s" RESET "\n", numero, texto);
 }
 
-void Print_Prompt()
+void Print_Prompt(int n)
 {
-    printf("\n" ROJO_SANGRE "  [?] " GRIS_NIEBLA "Que decides hacer..." NARANJA_CALABAZA " > " RESET);
+    if(n == 0)
+    {
+        printf("\t" ROJO_SANGRE "  [?] " NARANJA_CALABAZA " > " RESET);
+    }
+    else
+    {
+        printf("\t" ROJO_SANGRE "  [?] " GRIS_NIEBLA "Que decides hacer..." NARANJA_CALABAZA " > " RESET);
+    }
 }
 
 void Print_Menu_Inicial(void)
@@ -31,18 +38,16 @@ void Print_Menu_Inicial(void)
     Print_Opcion(3, "Revisar Mochila (Inventario)");
     Print_Opcion(4, "Bitacora de Decisiones (Historial)");
     Print_Opcion(5, "Rendirse (Salir)");
-    Print_Prompt();
+    Print_Prompt(1);
 }
 
 void Esperar_Enter()
 {
-    int c;
     printf("\n\t" GRIS_NIEBLA "Presione " ROJO_SANGRE "ENTER" GRIS_NIEBLA " para volver..." RESET);
 
-    while ((c = getchar()) != '\n' && c != EOF);   // limpia lo pendiente
-    if (c == EOF) return;                          // entrada cerrada (Ctrl+D)
-
-    while ((c = getchar()) != '\n' && c != EOF);   // espera ENTER
+    // Limpia cualquier residuo que haya quedado en el buffer ANTES de esperar
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
 int Opcion_Int(int min, int max)
@@ -52,7 +57,6 @@ int Opcion_Int(int min, int max)
     
     while (1) 
     {
-        Print_Prompt();
         leidos = scanf("%d", &opcion);
         
         if (leidos != 1) 
@@ -85,14 +89,14 @@ char Opcion_Char(const char *mensaje)
         if (mensaje != NULL) {
             printf("%s", mensaje);
         }
-        Print_Prompt();
+        Print_Prompt(0);
 
         // Leemos un caracter saltando espacios iniciales
         if (scanf(" %c", &c) == 1) 
         {
-            // Limpiar el resto de la línea (evita problemas con cadenas largas)
+            // Limpiar el resto de la linea (evita problemas con cadenas largas)
             while (getchar() != '\n'); 
-            return (char)tolower((unsigned char)c); // Retorna la letra en minúscula siempre
+            return (char)tolower((unsigned char)c); // Retorna la letra en minuscula siempre
         }
         
         while (getchar() != '\n'); 

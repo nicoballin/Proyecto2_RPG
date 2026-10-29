@@ -13,13 +13,13 @@ Personaje* Story_Introduccion(void)
     printf("\t" GRIS_NIEBLA "ha transformado el campus  en un infierno." RESET "\n\n");
 
     printf("\t" BLANCO_HUESO "Identificate, sobreviviente:" RESET "\n");
-    Print_Prompt();
-
-    if (scanf("%49s", nombre_jugador) != 1)
+    Print_Prompt(0);
+    
+    if (scanf(" %49[^\n]", nombre_jugador) != 1)
     {
         strcpy(nombre_jugador, "Sobreviviente");
     }
-    while (getchar() != '\n'); // Limpiar buffer
+    Esperar_Enter();
 
     // Crear personaje dinamicamente con el nombre ingresado
     Personaje *P = Crear_Personaje(nombre_jugador, 100, 15, 5);
@@ -30,7 +30,7 @@ Personaje* Story_Introduccion(void)
         return NULL;
     }
 
-    printf("\n\t" VERDE_ZOMBIE "Atencion, %s." RESET "\n", P->name);
+    printf("\n\t" VERDE_ZOMBIE "Atencion, "RESET ROJO_SANGRE"%s." RESET "\n", P->name);
     printf("\t" GRIS_NIEBLA "Estas atrapado dentro del perimetro de contencion." RESET "\n");
     printf("\t" GRIS_NIEBLA "Tu unico objetivo es encontrar suministros y llegar" RESET "\n");
     printf("\t" GRIS_NIEBLA "a los laboratorios subterraneos para erradicar la amenaza." RESET "\n");
@@ -81,12 +81,14 @@ void Story_Explorar_Zona(Personaje *P, Inventario *I, Historial *H)
                 {
                     printf(NARANJA_CALABAZA "\nHas destruido a la aberracion! Entre sus restos encuentras un Objeto EPICO.\n" RESET);
                     
-                    Item* epico = Item_Crear(999, "Vacuna Experimental", ITEM_POCION, RAREZA_LEGENDARIA, 100);
-                    if(epico != NULL)
-                    {
-                        Inventario_Anhadir_Item(I, *epico);
-                        free(epico);
-                    }
+                    // Roll del jefe: nada 20%, epico 60%, legendario 20%
+                    int tirada = rand() % 100;
+                    if(tirada < 20)
+                        printf("\t" GRIS_NIEBLA "Entre sus restos no queda nada util..." RESET "\n");
+                    else if(tirada < 80)
+                        Story_Encontrar_Item(I, RAREZA_EPICA, false);
+                    else
+                        Story_Encontrar_Item(I, RAREZA_LEGENDARIA, false);
 
                     if(opcion_zona == 3)
                     {
@@ -95,6 +97,7 @@ void Story_Explorar_Zona(Personaje *P, Inventario *I, Historial *H)
                         return;
                     }
                     buscando = false;
+                    explorando = false;
                     enemigos_derrotados = 0;
                 }
                 break;
@@ -161,25 +164,9 @@ void Story_Explorar_Zona(Personaje *P, Inventario *I, Historial *H)
             }
             else if(probabilidad < 68)
             {
-                printf(NARANJA_CALABAZA "\nVes un casillero semiabierto con suministros RAROS!\n" RESET);
-                Item* loot = Item_Crear(rand() % 1000 + 100, "Jeringa de Adrenalina", ITEM_POCION, RAREZA_EPICA, 40);
-
-                if(loot != NULL)
-                {
-                    printf("Encuentras: %s (Efecto: +%d)\n", loot->name, loot->value);
-                    char resp = Opcion_Char("Deseas tomar el objeto? (s/n)");
-
-                    if(resp == 's')
-                    {
-                        Inventario_Anhadir_Item(I, *loot);
-                        printf("Guardado en la mochila.\n");
-                    }
-                    else
-                    {
-                        printf("Decides dejar el objeto en el casillero.\n");
-                    }
-                    free(loot);
-                }
+                printf(NARANJA_CALABAZA "\nVes un casillero semiabierto!\n" RESET);
+                // Botin aleatorio
+                Story_Encontrar_Item(I, Rareza_Aleatoria(), true);
                 buscando = false;
             }
             else
@@ -198,5 +185,29 @@ void Story_Explorar_Zona(Personaje *P, Inventario *I, Historial *H)
                 printf(GRIS_NIEBLA "Regresas a la zona segura.\n" RESET);
             }
         }
+    }
+}
+
+void Story_Encontrar_Item(Inventario *I, ItemRarity rareza, bool preguntar)
+{
+    Item *loot = Item_Generar(rareza, Generar_Id_Libre(I));
+    if (loot == NULL) return;
+
+    printf("\n\t" NARANJA_CALABAZA "Encuentras: " BLANCO_HUESO "%s" GRIS_NIEBLA " (%s | %s | Efecto: +%d)" RESET "\n",
+           loot->name, Item_Tipo_A_Texto(loot->type), Item_Rareza_A_Texto(loot->rarity), loot->value);
+
+    bool tomar = true;
+    if (preguntar)
+        tomar = (Opcion_Char("\n\t" GRIS_NIEBLA "Deseas tomar el objeto? (s/n)" RESET) == 's');
+
+    if (tomar && Inventario_Anhadir_Item(I, *loot))
+    {
+        free(loot); // el nombre ahora pertenece al inventario
+        printf("\t" VERDE_ZOMBIE "Guardado en la mochila." RESET "\n");
+    }
+    else
+    {
+        Item_Destruir(loot);
+        printf("\t" GRIS_NIEBLA "Dejas el objeto atras." RESET "\n");
     }
 }

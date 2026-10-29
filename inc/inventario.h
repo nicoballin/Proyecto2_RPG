@@ -98,4 +98,12 @@ bool Inventario_Quitar_Item(Inventario *Inv, int item_id);
  */
 void Inventario_Destruir(Inventario* Inv);
 
+/**
+ * @brief Funcion que busque un id que no este en uso dentor del inventario
+ * 
+ * @param I Puntero al inventario
+ * @return Retorna el id nuevo
+ */
+int Generar_Id_Libre(Inventario *I);
+
 #endif
