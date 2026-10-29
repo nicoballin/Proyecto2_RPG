@@ -27,7 +27,7 @@ bool Cola_Esta_Vacia(Queue Q)
     return (Q->size == 0);
 }
 
-bool Cola_Enqueue(QueueElement X, Queue Q)
+bool Cola_Enqueue(QueueElementType X, Queue Q)
 {
     if (Q == NULL) return false;
 
@@ -73,7 +73,7 @@ bool Cola_Dequeue(Queue Q)
     return true;
 }
 
-QueueElement Cola_Front(Queue Q)
+QueueElementType Cola_Front(Queue Q)
 {
     if (Cola_Esta_Vacia(Q)) return NULL;
     return Q->Front->Element;
