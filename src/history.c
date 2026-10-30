@@ -5,14 +5,6 @@
 #include <string.h>
 #include "print.h"
 
-#define DESC_MAX 128
-
-typedef struct { 
-    StackElement base; 
-    char descripcion[DESC_MAX]; 
-    int enemigo_id; 
-} AccionExt;
-
 struct _historial {
     Stack acciones;
 };
@@ -128,19 +120,19 @@ bool Historial_Guardar_Archivo(const char *ruta, const Historial *H)
     StackPosition p = H->acciones->Next;
     while (p != NULL)
     {
-        AccionExt *a = (AccionExt *)p;
+        StackElement *e = &p->Element;
 
         char *nombre_item = "NULL";
-        if (a->base.item.name != NULL)
+        if (e->item.name != NULL)
         {
-            nombre_item = a->base.item.name;
+            nombre_item = e->item.name;
         }
 
         fprintf(f, "%d|%s|%d|%s|%d|%d|%d|%d|%d\n",
-                a->base.tipo_accion, a->descripcion,
-                a->base.item.id, nombre_item,
-                a->base.item.type, a->base.item.rarity, a->base.item.value,
-                a->base.posicion, a->enemigo_id);
+                e->tipo_accion, e->descripcion,
+                e->item.id, nombre_item,
+                e->item.type, e->item.rarity, e->item.value,
+                e->posicion, e->enemigo_id);
 
         p = p->Next;
     }
@@ -162,30 +154,30 @@ Historial *Historial_Cargar_Archivo(const char *ruta)
         return NULL;
     }
 
-    AccionExt a;
+    StackElement e;
     char nom[100];
 
     while (1) {
         /* Tipo y rareza temporal */
         int tipo_temp, rareza_temp;
         int r = fscanf(f, "%d|%127[^|]|%d|%99[^|]|%d|%d|%d|%d|%d\n",
-                        &a.base.tipo_accion, a.descripcion, &a.base.item.id, nom,
-                        &tipo_temp, &rareza_temp, &a.base.item.value,
-                        &a.base.posicion, &a.enemigo_id);
-        a.base.item.type = (ItemType)tipo_temp;
-        a.base.item.rarity = (ItemRarity)rareza_temp;
+                        &e.tipo_accion, e.descripcion, &e.item.id, nom,
+                        &tipo_temp, &rareza_temp, &e.item.value,
+                        &e.posicion, &e.enemigo_id);
+        e.item.type = (ItemType)tipo_temp;
+        e.item.rarity = (ItemRarity)rareza_temp;
 
         if (r != 9) break;
         if (strcmp(nom, "NULL") != 0)
         {
-            a.base.item.name = strdup(nom);
-        } 
+            e.item.name = strdup(nom);
+        }
         else
         {
-            a.base.item.name = NULL;
+            e.item.name = NULL;
         }
 
-        Push(a.base, H->acciones);
+        Push(e, H->acciones);
     }
 
     fclose(f);
@@ -198,32 +190,32 @@ bool Historial_Registrar(Historial *H, int tipo, const char *descripcion,
     if (H == NULL || descripcion == NULL)
         return false;
 
-    AccionExt a = {0};
-    a.base.tipo_accion = tipo;
-    a.base.posicion = posicion;
-    a.enemigo_id = enemigo_id;
+    StackElement e = {0};
+    e.tipo_accion = tipo;
+    e.posicion = posicion;
+    e.enemigo_id = enemigo_id;
 
-    strncpy(a.descripcion, descripcion, DESC_MAX - 1);
-    a.descripcion[DESC_MAX - 1] = '\0';
+    strncpy(e.descripcion, descripcion, 127);
+    e.descripcion[127] = '\0';
 
     if (item != NULL)
     {
-        a.base.item = *item;                    // Copia superficial
-        if (item->name != NULL) 
+        e.item = *item;                    // Copia superficial
+        if (item->name != NULL)
         {
-            a.base.item.name = strdup(item->name); // Copia profunda del string
-            if (a.base.item.name == NULL)
+            e.item.name = strdup(item->name); // Copia profunda del string
+            if (e.item.name == NULL)
                 return false;
         }
-    } 
+    }
     else
     {
-        a.base.item.id = -1;
-        a.base.item.name = NULL;
-        a.base.item.type = 0;
-        a.base.item.rarity = 0;
-        a.base.item.value = 0;
+        e.item.id = -1;
+        e.item.name = NULL;
+        e.item.type = 0;
+        e.item.rarity = 0;
+        e.item.value = 0;
     }
 
-    return Push(a.base, H->acciones);
+    return Push(e, H->acciones);
 }

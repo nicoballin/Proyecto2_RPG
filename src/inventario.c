@@ -119,10 +119,11 @@ bool Inventario_Usar(Inventario *Inv, int item_id, Personaje *P)
                 P->vida = P->max_vida;
             printf("\t" VERDE_ZOMBIE "Usas %s: recuperas %d PV. " GRIS_NIEBLA "%s: %d/%d PV." RESET "\n",
                     copia.name, P->vida - antes, P->name, P->vida, P->max_vida);
-            // Guardar nombre antes de borrar (copia superficial -> puntero name se libera en Lista_Remover_Elemento)
-            char *nombre_item = copia.name;
+            // Copia PROFUNDA del nombre ANTES de borrar (Lista_Remover_Elemento libera el string original)
+            char *nombre_item = strdup(copia.name);
             Lista_Remover_Elemento(item_id, Inv->items);
             printf("\t" GRIS_NIEBLA "%s se elimina del inventario." RESET "\n", nombre_item);
+            free(nombre_item);
             return true;
         }
         case ITEM_ARMA:

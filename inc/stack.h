@@ -22,6 +22,8 @@ typedef struct {
     int tipo_accion;
     Item item;
     int posicion;
+    char descripcion[128];
+    int enemigo_id;
 } StackElement;
 
 typedef struct StackNode *StackPosition;
