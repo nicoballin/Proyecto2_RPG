@@ -83,10 +83,16 @@ void Cola_Destruir(Queue Q)
 {
     if (Q == NULL) return;
 
-    /* Si la cola esta vacia hace dequeue a cada elemento*/
-    while(!Cola_Esta_Vacia(Q))
+    /* Destruir cada enemigo en la cola antes de liberar los nodos */
+    while (!Cola_Esta_Vacia(Q))
     {
-        Cola_Dequeue(Q);
+        QueuePosition P = Q->Front;
+        Enemigo *enemigo = (Enemigo *)P->Element;
+        Enemigo_Destruir(enemigo);
+        Q->Front = Q->Front->Next;
+        free(P);
+        Q->size--;
     }
+    if (Q->Front == NULL) Q->Rear = NULL;
     free(Q);
 }

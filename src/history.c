@@ -5,10 +5,17 @@
 #include <string.h>
 #include "print.h"
 
+#define DESC_MAX 128
+
+typedef struct { 
+    StackElement base; 
+    char descripcion[DESC_MAX]; 
+    int enemigo_id; 
+} AccionExt;
+
 struct _historial {
     Stack acciones;
 };
-
 
 Historial *Historial_Crear(void)
 {
@@ -110,4 +117,113 @@ void Historial_Destruir(Historial *H)
     free(H);
 }
 
+bool Historial_Guardar_Archivo(const char *ruta, const Historial *H)
+{
+    if (H == NULL) return 0;
+    if (ruta == NULL) return 0;
 
+    FILE *f = fopen(ruta, "w");
+    if (f == NULL) return 0;
+
+    StackPosition p = H->acciones->Next;
+    while (p != NULL)
+    {
+        AccionExt *a = (AccionExt *)p;
+
+        char *nombre_item = "NULL";
+        if (a->base.item.name != NULL)
+        {
+            nombre_item = a->base.item.name;
+        }
+
+        fprintf(f, "%d|%s|%d|%s|%d|%d|%d|%d|%d\n",
+                a->base.tipo_accion, a->descripcion,
+                a->base.item.id, nombre_item,
+                a->base.item.type, a->base.item.rarity, a->base.item.value,
+                a->base.posicion, a->enemigo_id);
+
+        p = p->Next;
+    }
+    fclose(f);
+    return 1;
+}
+
+Historial *Historial_Cargar_Archivo(const char *ruta)
+{
+    if (ruta == NULL) return NULL;
+
+    FILE *f = fopen(ruta, "r");
+    if (f == NULL) return NULL;
+
+    Historial *H = Historial_Crear();
+    if (H == NULL)
+    {
+        fclose(f);
+        return NULL;
+    }
+
+    AccionExt a;
+    char nom[100];
+
+    while (1) {
+        /* Tipo y rareza temporal */
+        int tipo_temp, rareza_temp;
+        int r = fscanf(f, "%d|%127[^|]|%d|%99[^|]|%d|%d|%d|%d|%d\n",
+                        &a.base.tipo_accion, a.descripcion, &a.base.item.id, nom,
+                        &tipo_temp, &rareza_temp, &a.base.item.value,
+                        &a.base.posicion, &a.enemigo_id);
+        a.base.item.type = (ItemType)tipo_temp;
+        a.base.item.rarity = (ItemRarity)rareza_temp;
+
+        if (r != 9) break;
+        if (strcmp(nom, "NULL") != 0)
+        {
+            a.base.item.name = strdup(nom);
+        } 
+        else
+        {
+            a.base.item.name = NULL;
+        }
+
+        Push(a.base, H->acciones);
+    }
+
+    fclose(f);
+    return H;
+}
+
+bool Historial_Registrar(Historial *H, int tipo, const char *descripcion,
+                          const Item *item, int posicion, int enemigo_id)
+{
+    if (H == NULL || descripcion == NULL)
+        return false;
+
+    AccionExt a = {0};
+    a.base.tipo_accion = tipo;
+    a.base.posicion = posicion;
+    a.enemigo_id = enemigo_id;
+
+    strncpy(a.descripcion, descripcion, DESC_MAX - 1);
+    a.descripcion[DESC_MAX - 1] = '\0';
+
+    if (item != NULL)
+    {
+        a.base.item = *item;                    // Copia superficial
+        if (item->name != NULL) 
+        {
+            a.base.item.name = strdup(item->name); // Copia profunda del string
+            if (a.base.item.name == NULL)
+                return false;
+        }
+    } 
+    else
+    {
+        a.base.item.id = -1;
+        a.base.item.name = NULL;
+        a.base.item.type = 0;
+        a.base.item.rarity = 0;
+        a.base.item.value = 0;
+    }
+
+    return Push(a.base, H->acciones);
+}

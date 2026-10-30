@@ -17,6 +17,8 @@
 #include "list.h"
 #include "personaje.h"
 
+typedef struct _historial Historial;   // evita dependencias circulares
+
 typedef struct _inventario
 {
     List items; // Lista doblemente enlazada con centinela
@@ -87,9 +89,10 @@ bool Inventario_Usar(Inventario *Inv, int item_id, Personaje *P);
  * 
  * @param Inv El inventarrio en forma de lista enlazada
  * @param item_id Id del Item (Item.id)
+ * @param H Puntero al historial
  * @return TRUE si existia y se elimino o FALSE si no existe.
  */
-bool Inventario_Quitar_Item(Inventario *Inv, int item_id);
+bool Inventario_Quitar_Item(Inventario *Inv, int item_id, Historial *H);
 
 /**
  * @brief Libera el inventario y todos sus items.

@@ -3,6 +3,7 @@
 #include <string.h>
 #include "save.h"
 #include "print.h"
+#include "history.h"
 
 bool Partida_Guardar(const char *ruta, const Personaje *P, const Inventario *I)
 {
@@ -119,4 +120,18 @@ Personaje* Partida_Cargar(const char *ruta, Inventario *I)
     fclose(f);
     printf(VERDE_ZOMBIE "\n\tPartida de %s cargada correctamente." RESET "\n", nombre);
     return P;
+}
+
+bool Partida_Guardar_Historial(const char *ruta, const Historial *H)
+{
+    if (H == NULL || ruta == NULL)
+        return false;
+    return Historial_Guardar_Archivo(ruta, H);
+}
+
+Historial *Partida_Cargar_Historial(const char *ruta)
+{
+    if (ruta == NULL)
+        return NULL;
+    return Historial_Cargar_Archivo(ruta);
 }

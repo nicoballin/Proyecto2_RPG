@@ -48,6 +48,12 @@ int main(void)
     if (inicio == 2)
     {
         heroe = Partida_Cargar(RUTA_GUARDADO, inventario_heroe);
+        Historial *h = Partida_Cargar_Historial("partida.sav.hist");
+        if (h != NULL)
+        {
+            Historial_Destruir(historial_partida);
+            historial_partida = h;
+        }
         if (heroe == NULL)
             printf(GRIS_NIEBLA "\n\tSe iniciara una nueva partida.\n" RESET);
         Esperar_Enter();
@@ -111,6 +117,7 @@ int main(void)
                 break;
             case 5:
                 Partida_Guardar(RUTA_GUARDADO, heroe, inventario_heroe);
+                Partida_Guardar_Historial("partida.sav.hist", historial_partida);
                 Esperar_Enter();
                 break;
             case 6:
