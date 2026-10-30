@@ -8,6 +8,7 @@
 #include "combat.h"
 #include "story.h"
 #include "print.h"
+#include "save.h"
 
 int main(void)
 {

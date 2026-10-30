@@ -16,12 +16,27 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
         return true;
     }
 
+    Print_Titulo("¡AMENAZA DETECTADA!");
+    printf(ROJO_SANGRE "\n¡Un grupo de enemigos te bloquea el paso!" RESET "\n");
+    printf(BLANCO_HUESO "Enemigos en la oleada:\n" RESET);
+
+    // Mostramos la fila completa de la cola
+    QueuePosition pos = cola->Front;
+    int idx = 1;
+    while (pos != NULL)
+    {
+        printf(GRIS_NIEBLA "  %d. %s (%d PV)\n" RESET, idx++, pos->Element->name, pos->Element->vida);
+        pos = pos->Next;
+    }
+    printf(NARANJA_CALABAZA "\nPrimer enemigo al frente: %s" RESET "\n", cola->Front->Element->name);
+    Esperar_Enter();
+
     /* Si la cola enemigos no esta vacia y el jugador esta vivo: */
     Print_Titulo("ENTRANDO EN COMBATE");
     while (!Cola_Esta_Vacia(cola) && P->vida > 0)
     {
         Enemigo *actual = Cola_Front(cola);
-        
+
         /* Necesitamos vivos a ambos para un pvp 1v1 */
         while (!Enemigo_Muerto(actual) && P->vida > 0)
         {
@@ -74,7 +89,7 @@ bool Combate_Iniciar(Personaje *P, Inventario *I, Queue cola)
     }
 
     printf(VERDE_ZOMBIE "Lograste sobrevivir a este encuentro. El silencio vuelve a la zona." RESET "\n");
-
+    Esperar_Enter();
     return true;
 }
 
