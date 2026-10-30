@@ -62,8 +62,12 @@ bool Lista_Remover_Elemento(int id, List L)
     }
 
     P->Prev->Next = P->Next;
-    if(P->Next != NULL)
-        P->Next->Prev = P->Prev;
+    if(P->Next != NULL) P->Next->Prev = P->Prev;
+
+    if (P->Element.name != NULL)
+    {
+        free(P->Element.name);
+    }
     free(P);
 
     return true;
@@ -79,11 +83,17 @@ bool Lista_Esta_Vacia(List L)
 
 void Lista_Destruir(List L)
 {
-    ListPosition P = L;
+    if (L == NULL) return;
+    ListPosition P = L->Next; /* primer elemento real */
     while (P != NULL) 
     {
         ListPosition Tmp = P->Next;
+        if (P->Element.name != NULL)
+        {
+            free(P->Element.name);
+        }
         free(P);
         P = Tmp;
     }
+    free(L); /* liberamos centinela */
 }

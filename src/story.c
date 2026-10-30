@@ -127,11 +127,7 @@ void Story_Explorar_Zona(Personaje *P, Inventario *I, Historial *H)
                 {
                     Queue ola = Generar_Ola(opcion_zona);
                     Combate_Iniciar(P, I, ola);
-                    
-                    if(!Cola_Esta_Vacia(ola))
-                    {
-                        Cola_Destruir(ola);
-                    }
+                    Cola_Destruir(ola); /* liberar cola */
 
                     if(P->vida > 0)
                     {

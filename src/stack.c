@@ -75,15 +75,19 @@ void Pila_Destruir(Stack *s)
     if (s == NULL || *s == NULL)
         return;
 
-    StackPosition actual = *s;
+    StackPosition actual = (*s)->Next; /* saltar el header */
 
     while (actual != NULL)
     {
         StackPosition siguiente = actual->Next;
+        if (actual->Element.item.name != NULL)
+        {
+            free(actual->Element.item.name); /*nombre guardado en la accion*/
+        }
         free(actual);
         actual = siguiente;
     }
-
+    free(*s); /* free a la cabecera*/
     *s = NULL;
 
 }

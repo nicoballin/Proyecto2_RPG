@@ -16,9 +16,19 @@ bool Partida_Guardar(const char *ruta, const Personaje *P, const Inventario *I)
         return false;
     }
 
-    /*Formato: Nombre Vida MaxVida Danho Defensa*/
-    fprintf(f, "%s %d %d %d %d\n", P->name, P->vida, P->max_vida, P->danho, P->defensa);
-    
+    /* IDs del equipo (-1 si no hay nada equipado) */
+    int id_arma = -1;
+    int id_armadura = -1;
+
+    if (P->tiene_arma)
+        id_arma = P->arma_equipada.id;
+    if (P->tiene_armadura) 
+        id_armadura = P->armadura_equipada.id;
+
+    /* Formato: Nombre\nVida MaxVida DanhoBase DefensaBase IdArma IdArmadura */
+    fprintf(f, "%s\n%d %d %d %d %d %d\n", P->name, P->vida, P->max_vida,
+            P->danho_base, P->defensa_base, id_arma, id_armadura);
+
     /* Cuenta items inventario */
     int total_items = 0;
     ListPosition p = I->items->Next;
@@ -56,16 +66,22 @@ Personaje* Partida_Cargar(const char *ruta, Inventario *I)
 
     /* 49 caracteres + '\0' */
     char nombre[50];
-    int vida, max_vida, danho, defensa;
-    if (fscanf(f, "%49s %d %d %d %d", nombre, &vida, &max_vida, &danho, &defensa) != 5)
+    int vida, max_vida, danho_base, defensa_base, id_arma, id_armadura;
+    /* lee y guarda todos los caracteres que el usuario escriba hasta salto linea */
+    if (fscanf(f, " %49[^\n] %d %d %d %d %d %d", nombre, &vida, &max_vida,
+           &danho_base, &defensa_base, &id_arma, &id_armadura) != 7)
     {
         fclose(f);
         return NULL;
     }
 
-    Personaje *P = Crear_Personaje(nombre, max_vida, danho, defensa);
-    if (P != NULL)
-        P->vida = vida;
+    Personaje *P = Crear_Personaje(nombre, max_vida, danho_base, defensa_base);
+    if (P == NULL)
+    {
+        fclose(f);
+        return NULL;
+    }
+    P->vida = vida;
 
     /* Cargar items */
     int total_items = 0;
@@ -95,6 +111,10 @@ Personaje* Partida_Cargar(const char *ruta, Inventario *I)
             }
         }
     }
+    if (id_arma != -1) 
+        Inventario_Usar(I, id_arma, P);
+    if (id_armadura != -1) 
+        Inventario_Usar(I, id_armadura, P);
 
     fclose(f);
     printf(VERDE_ZOMBIE "\n\tPartida de %s cargada correctamente." RESET "\n", nombre);

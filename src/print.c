@@ -37,7 +37,8 @@ void Print_Menu_Inicial(void)
     Print_Opcion(2, "Explorar Instalaciones");
     Print_Opcion(3, "Revisar Mochila (Inventario)");
     Print_Opcion(4, "Bitacora de Decisiones (Historial)");
-    Print_Opcion(5, "Rendirse (Salir)");
+    Print_Opcion(5, "Guardar partida");
+    Print_Opcion(6, "Rendirse (Salir)");
     Print_Prompt(1);
 }
 
